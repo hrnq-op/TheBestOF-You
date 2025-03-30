@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/03/2025 às 18:35
+-- Tempo de geração: 30/03/2025 às 20:30
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -66,9 +66,11 @@ CREATE TABLE `dieta_alimentos` (
 
 CREATE TABLE `evolucao` (
   `id_evolucao` int(11) NOT NULL,
-  `data` date NOT NULL,
-  `peso` float NOT NULL,
-  `id_usuario` int(11) NOT NULL
+  `data_inicio` date NOT NULL,
+  `peso_incio` float NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `data_fim` date NOT NULL,
+  `peso_fim` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -151,7 +153,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `objetivo`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`) VALUES
-(1, '', '', 19, 90, 180, 'cutting', 2050.06, 1.55, 3177.59, 'masculino', 'harris', '', '');
+(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$TCxfeR7zWUnpn9XiDMR9COtQFWMuaKHOcLgt0Ifccj7XXa5w8QNte', 16, 90.5, 177, 'cutting', 2059.46, 1.55, 3192.16, 'masculino', 'harris', 'Henrique', '64984355664');
 
 --
 -- Índices para tabelas despejadas
