@@ -51,6 +51,14 @@
     </form>
 
     <?php
+    session_start();
+
+    // Verificar se o usuário está logado
+    if (!isset($_SESSION['usuario_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
     include "conexao.php";
 
     if (isset($_POST['calcular'])) {
@@ -95,17 +103,17 @@
         echo "<h3>Seu gasto calórico total (TMB + nível de atividade) é: " . round($tmb_total, 2) . " kcal/dia</h3>";
 
         echo "<form method='post'>
-            <input type='hidden' name='peso' value='$peso'>
-            <input type='hidden' name='altura' value='$altura'>
-            <input type='hidden' name='idade' value='$idade'>
-            <input type='hidden' name='sexo' value='$sexo'>
-            <input type='hidden' name='protocolo' value='$protocolo'>
-            <input type='hidden' name='nivel_atv_fisica' value='$nivel_atv'>
-            <input type='hidden' name='objetivo' value='$objetivo'>
-            <input type='hidden' name='mb' value='$mb'>
-            <input type='hidden' name='tmb_total' value='$tmb_total'>
-            <button type='submit' name='avancar'>Avançar</button>
-        </form>";
+        <input type='hidden' name='peso' value='$peso'>
+        <input type='hidden' name='altura' value='$altura'>
+        <input type='hidden' name='idade' value='$idade'>
+        <input type='hidden' name='sexo' value='$sexo'>
+        <input type='hidden' name='protocolo' value='$protocolo'>
+        <input type='hidden' name='nivel_atv_fisica' value='$nivel_atv'>
+        <input type='hidden' name='objetivo' value='$objetivo'>
+        <input type='hidden' name='mb' value='$mb'>
+        <input type='hidden' name='tmb_total' value='$tmb_total'>
+        <button type='submit' name='avancar'>Avançar</button>
+    </form>";
     }
 
     if (isset($_POST['avancar'])) {
@@ -119,20 +127,32 @@
         $mb = $_POST['mb'];
         $tmb_total = $_POST['tmb_total'];
 
+        // Verificar se a conexão com o banco está ativa
         if (!$conexao) {
             die("<h3>Erro: Falha na conexão com o banco de dados.</h3>");
         }
 
-        $sql = "INSERT INTO usuario (peso, altura, idade, sexo, protocolo, nivel_atv_fisica, objetivo, metabolismo_basal, gasto_calorico_total)
-                VALUES ('$peso', '$altura', '$idade', '$sexo', '$protocolo', '$nivel_atv', '$objetivo', '$mb', '$tmb_total')";
+        // Atualizar dados na tabela 'usuario' para o usuário logado
+        $sql = "UPDATE usuario SET
+            peso = '$peso',
+            altura = '$altura',
+            idade = '$idade',
+            sexo = '$sexo',
+            protocolo = '$protocolo',
+            nivel_atv_fisica = '$nivel_atv',
+            objetivo = '$objetivo',
+            metabolismo_basal = '$mb',
+            gasto_calorico_total = '$tmb_total'
+            WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
 
         if (mysqli_query($conexao, $sql)) {
-            echo "<p>Conta cadastrada com sucesso!</p>";
+            echo "<p>Dados registrados com sucesso!</p>";
         } else {
-            echo "<p>Erro ao cadastrar conta: " . mysqli_error($conexao) . "</p>";
+            echo "<p>Erro ao atualizar os dados: " . mysqli_error($conexao) . "</p>";
         }
     }
     ?>
+
 </body>
 
 </html>
