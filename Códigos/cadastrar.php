@@ -35,7 +35,7 @@ $erro = false;
     } else{
         $sql_code="INSERT INTO usuario (email, senha, nome, telefone)
          VALUES('$email','$senha','$nome','$telefone')";
-         $deu_certo = $mysqli -> query($sql_code) or die(mysqli->error);
+         $deu_certo = $mysqli -> query($sql_code) or die($mysqli->error);
          if($deu_certo){
             echo "<p><b>Você foi cadastrado com sucesso!</b></p>";
             unset($_POST);
