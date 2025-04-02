@@ -202,7 +202,7 @@
             }
         }
 
-        header("Location: dieta.php");
+        header("Location: busca_informacao_nutricional.php");
     }
     ?>
 
