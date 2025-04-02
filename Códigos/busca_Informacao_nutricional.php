@@ -106,7 +106,25 @@ function buscarInformacoesNutricionaisUSDA($alimento)
         'truta' => 'trout',
         'cavala' => 'mackerel',
         'sardinha' => 'sardine',
-        'açucar' => 'sugar'
+        'açúcar' => 'sugar',
+        'limão' => 'lemon',
+        'uva' => 'grape',
+        'ameixa' => 'plum',
+        'mamão' => 'papaya',
+        'cereja' => 'cherry',
+        'ervilha' => 'pea',
+        'beterraba' => 'beet',
+        'milho' => 'corn',
+        'rabanete' => 'radish',
+        'castanha-do-pará' => 'brazil nut',
+        'hortelã' => 'mint',
+        'gengibre' => 'ginger',
+        'ervas finas' => 'fine herbs',
+        'canela' => 'cinnamon',
+        'cravo' => 'clove',
+        'noz-moscada' => 'nutmeg',
+        'cacau' => 'cocoa',
+        'baunilha' => 'vanilla'
     ];
 
 
@@ -164,7 +182,7 @@ function buscarInformacoesNutricionaisUSDA($alimento)
 
 $informacoes_nutricionais = [];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["alimentos"])) {
     $alimentos = explode(",", $_POST["alimentos"]);
 
     foreach ($alimentos as $alimento) {
@@ -223,6 +241,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
+<?php
+// Verifica se o botão "Montar Dieta" foi pressionado
+if (isset($_POST["montar_dieta"])) {
+    // Redireciona para a página montagem_dieta.php
+    header("Location: montagem_dieta.php");
+    exit(); // Garante que o script pare aqui e o redirecionamento aconteça
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -276,6 +303,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </tr>
             <?php endforeach; ?>
         </table>
+
+        <!-- Formulário para redirecionamento -->
+        <form method="post">
+            <button type="submit" name="montar_dieta">Montar Dieta</button>
+        </form>
+
     <?php endif; ?>
 </body>
 
