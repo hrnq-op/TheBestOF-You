@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/03/2025 às 20:30
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Tempo de geração: 01-Abr-2025 às 15:57
+-- Versão do servidor: 10.4.27-MariaDB
+-- versão do PHP: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `alimentos`
+-- Estrutura da tabela `alimentos`
 --
 
 CREATE TABLE `alimentos` (
@@ -36,20 +36,28 @@ CREATE TABLE `alimentos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `dieta`
+-- Estrutura da tabela `dieta`
 --
 
 CREATE TABLE `dieta` (
   `id_dieta` int(11) NOT NULL,
   `data_inicio` date NOT NULL,
   `id_usuario` int(11) NOT NULL,
-  `objetivo` varchar(30) NOT NULL
+  `objetivo` varchar(30) NOT NULL,
+  `situacao` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `dieta`
+--
+
+INSERT INTO `dieta` (`id_dieta`, `data_inicio`, `id_usuario`, `objetivo`, `situacao`) VALUES
+(1, '2025-04-01', 1, 'cutting', 'A');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `dieta_alimentos`
+-- Estrutura da tabela `dieta_alimentos`
 --
 
 CREATE TABLE `dieta_alimentos` (
@@ -61,7 +69,7 @@ CREATE TABLE `dieta_alimentos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `evolucao`
+-- Estrutura da tabela `evolucao`
 --
 
 CREATE TABLE `evolucao` (
@@ -76,7 +84,7 @@ CREATE TABLE `evolucao` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `exercicio`
+-- Estrutura da tabela `exercicio`
 --
 
 CREATE TABLE `exercicio` (
@@ -89,7 +97,7 @@ CREATE TABLE `exercicio` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `informacoes_nutricionais`
+-- Estrutura da tabela `informacoes_nutricionais`
 --
 
 CREATE TABLE `informacoes_nutricionais` (
@@ -104,7 +112,7 @@ CREATE TABLE `informacoes_nutricionais` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `treino`
+-- Estrutura da tabela `treino`
 --
 
 CREATE TABLE `treino` (
@@ -116,7 +124,7 @@ CREATE TABLE `treino` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `treino_exercicio`
+-- Estrutura da tabela `treino_exercicio`
 --
 
 CREATE TABLE `treino_exercicio` (
@@ -128,7 +136,7 @@ CREATE TABLE `treino_exercicio` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuario`
+-- Estrutura da tabela `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -138,7 +146,6 @@ CREATE TABLE `usuario` (
   `idade` int(3) NOT NULL,
   `peso` float NOT NULL,
   `altura` int(3) NOT NULL,
-  `objetivo` varchar(30) NOT NULL,
   `metabolismo_basal` float NOT NULL,
   `nivel_atv_fisica` float NOT NULL,
   `gasto_calorico_total` float NOT NULL,
@@ -149,31 +156,31 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `usuario`
+-- Extraindo dados da tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `objetivo`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$TCxfeR7zWUnpn9XiDMR9COtQFWMuaKHOcLgt0Ifccj7XXa5w8QNte', 16, 90.5, 177, 'cutting', 2059.46, 1.55, 3192.16, 'masculino', 'harris', 'Henrique', '64984355664');
+INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`) VALUES
+(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$WIH90SekyzWjinEiOswNwuLKSDhI4sCXV.5u4jES0S/qZwE7gGe0G', 16, 90.5, 177, 2059.46, 1.55, 3192.16, 'masculino', 'harris', 'henrique', '64988888888');
 
 --
 -- Índices para tabelas despejadas
 --
 
 --
--- Índices de tabela `alimentos`
+-- Índices para tabela `alimentos`
 --
 ALTER TABLE `alimentos`
   ADD PRIMARY KEY (`id_alimentos`);
 
 --
--- Índices de tabela `dieta`
+-- Índices para tabela `dieta`
 --
 ALTER TABLE `dieta`
   ADD PRIMARY KEY (`id_dieta`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices de tabela `dieta_alimentos`
+-- Índices para tabela `dieta_alimentos`
 --
 ALTER TABLE `dieta_alimentos`
   ADD PRIMARY KEY (`id_dieta_alimentos`),
@@ -181,34 +188,34 @@ ALTER TABLE `dieta_alimentos`
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices de tabela `evolucao`
+-- Índices para tabela `evolucao`
 --
 ALTER TABLE `evolucao`
   ADD PRIMARY KEY (`id_evolucao`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices de tabela `exercicio`
+-- Índices para tabela `exercicio`
 --
 ALTER TABLE `exercicio`
   ADD PRIMARY KEY (`id_exercicio`);
 
 --
--- Índices de tabela `informacoes_nutricionais`
+-- Índices para tabela `informacoes_nutricionais`
 --
 ALTER TABLE `informacoes_nutricionais`
   ADD PRIMARY KEY (`id_informacoes_nutricionais`),
   ADD KEY `id_alimentos` (`id_alimentos`);
 
 --
--- Índices de tabela `treino`
+-- Índices para tabela `treino`
 --
 ALTER TABLE `treino`
   ADD PRIMARY KEY (`id_treino`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Índices de tabela `treino_exercicio`
+-- Índices para tabela `treino_exercicio`
 --
 ALTER TABLE `treino_exercicio`
   ADD PRIMARY KEY (`id_treino_exercicio`),
@@ -216,13 +223,13 @@ ALTER TABLE `treino_exercicio`
   ADD KEY `id_exercicio` (`id_exercicio`);
 
 --
--- Índices de tabela `usuario`
+-- Índices para tabela `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id_usuario`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
@@ -235,7 +242,7 @@ ALTER TABLE `alimentos`
 -- AUTO_INCREMENT de tabela `dieta`
 --
 ALTER TABLE `dieta`
-  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `dieta_alimentos`
