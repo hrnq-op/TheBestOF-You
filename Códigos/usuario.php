@@ -125,22 +125,22 @@
         $objetivo = $_POST['objetivo'];
         $mb = $_POST['mb'];
         $tmb_total = $_POST['tmb_total'];
-    
+
         // Definir data de início como a data atual
         $data_inicio = date('Y-m-d');  // Data no formato 'YYYY-MM-DD'
-        
+
         // Definir a situação como "A" (Ativa)
         $situacao = 'A';
-    
+
         // Verificar se a conexão com o banco está ativa
         if (!$conexao) {
             die("<h3>Erro: Falha na conexão com o banco de dados.</h3>");
         }
-    
+
         // Verificar se o usuário já tem um registro na tabela 'usuario'
         $sql_usuario_check = "SELECT id_usuario FROM usuario WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
         $result_usuario_check = mysqli_query($conexao, $sql_usuario_check);
-    
+
         if (mysqli_num_rows($result_usuario_check) > 0) {
             // O usuário já existe, então vamos atualizar os dados
             $sql_usuario = "UPDATE usuario SET
@@ -153,7 +153,7 @@
                 metabolismo_basal = '$mb',
                 gasto_calorico_total = '$tmb_total'
                 WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";  // AQUI ADICIONAMOS A CLÁUSULA WHERE
-    
+
             // Verificar se a atualização dos dados do usuário foi bem-sucedida
             if (mysqli_query($conexao, $sql_usuario)) {
                 echo "<p>Dados do usuário registrados com sucesso!</p>";
@@ -164,7 +164,7 @@
             // O usuário não existe, então vamos inserir os dados
             $sql_usuario_insert = "INSERT INTO usuario ( peso, altura, idade, sexo, protocolo, nivel_atv_fisica, metabolismo_basal, gasto_calorico_total) 
                 VALUES ('$peso', '$altura', '$idade', '$sexo', '$protocolo', '$nivel_atv', '$mb', '$tmb_total')";
-            
+
             // Verificar se a inserção dos dados do usuário foi bem-sucedida
             if (mysqli_query($conexao, $sql_usuario_insert)) {
                 echo "<p>Dados do usuário inseridos com sucesso!</p>";
@@ -172,11 +172,11 @@
                 echo "<p>Erro ao inserir os dados do usuário: " . mysqli_error($conexao) . "</p>";
             }
         }
-    
+
         // Agora, vamos fazer a atualização ou inserção do objetivo na tabela 'dieta'
         $sql_check = "SELECT id_dieta FROM dieta WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
         $result = mysqli_query($conexao, $sql_check);
-    
+
         if (mysqli_num_rows($result) > 0) {
             // Se já existe um registro, fazemos o UPDATE
             $sql_dieta = "UPDATE dieta SET
@@ -184,7 +184,7 @@
                 data_inicio = '$data_inicio',
                 situacao = '$situacao'
                 WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
-    
+
             if (mysqli_query($conexao, $sql_dieta)) {
                 echo "<p>Objetivo e dados atualizados na tabela dieta com sucesso!</p>";
             } else {
@@ -194,17 +194,19 @@
             // Se não existe um registro, fazemos o INSERT
             $sql_dieta_insert = "INSERT INTO dieta (id_usuario, objetivo, data_inicio, situacao) 
                                  VALUES ('" . $_SESSION['usuario_id'] . "', '$objetivo', '$data_inicio', '$situacao')";
-    
+
             if (mysqli_query($conexao, $sql_dieta_insert)) {
                 echo "<p>Objetivo inserido na tabela dieta com sucesso!</p>";
             } else {
                 echo "<p>Erro ao inserir o objetivo na tabela dieta: " . mysqli_error($conexao) . "</p>";
             }
         }
+
+        header("Location: dieta.php");
     }
     ?>
-    
-    
+
+
 </body>
 
 </html>
