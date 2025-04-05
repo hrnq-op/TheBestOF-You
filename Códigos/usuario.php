@@ -202,7 +202,7 @@
             }
         }
 
-        header("Location: busca_informacao_nutricional.php");
+        header("Location: selecao_alimentos.php");
     }
     ?>
 
