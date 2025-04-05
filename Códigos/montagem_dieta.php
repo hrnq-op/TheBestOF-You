@@ -30,16 +30,16 @@
 </head>
 
 <body>
-    <h1>Sua dieta personalizada</h1>
+    <h1>Dieta Personalizada</h1>
 
     <?php
     include "conexao.php";
 
-    // Pega o último usuário que cadastrou uma dieta
+    // Busca os dados do último usuário com dieta cadastrada
     $stmt = $conexao->query("
-        SELECT u.id_usuario, u.gasto_calorico_total, d.id_dieta, d.objetivo, d.refeicoes
-        FROM usuario u
-        INNER JOIN dieta d ON u.id_usuario = d.id_usuario
+        SELECT u.id_usuario, u.gasto_calorico_total, u.carbo_necessarias, u.prot_necessarias, u.gord_necessarias, d.id_dieta, d.objetivo, d.refeicoes
+        FROM dieta d
+        INNER JOIN usuario u ON d.id_usuario = u.id_usuario
         ORDER BY d.id_dieta DESC
         LIMIT 1
     ");
@@ -48,7 +48,10 @@
         $row = $stmt->fetch_assoc();
         $id_usuario = $row['id_usuario'];
         $id_dieta = $row['id_dieta'];
-        $gasto_calorico = $row['gasto_calorico_total'];
+        $gasto_calorico = (float) $row['gasto_calorico_total'];
+        $carbo_necessarias = (float) $row['carbo_necessarias'];
+        $prot_necessarias = (float) $row['prot_necessarias'];
+        $gord_necessarias = (float) $row['gord_necessarias'];
         $objetivo = $row['objetivo'];
         $refeicoes = $row['refeicoes'];
     } else {
@@ -73,10 +76,24 @@
         $objetivo = strtolower($objetivo);
         $acao = ($objetivo === "cutting") ? "déficit calórico" : "superávit calórico";
 
-        $prompt = "Crie uma dieta personalizada de aproximadamente {$gasto_calorico} calorias para um usuário em fase de {$objetivo}, estabelecendo um {$acao} saudável. Use somente os seguintes alimentos: " . implode(", ", $alimentos) . ". Monte uma dieta diária detalhada com exatamente {$refeicoes} refeições organizadas muito bem. Em cada refeição, informe os alimentos, as quantidades e os valores nutricionais (calorias, carboidratos, proteínas, gorduras). Apresente o conteúdo em texto corrido, de forma clara, organizada e sem o uso de tabelas e sem formatação.";
+        $prompt = "Elabore uma dieta personalizada para um usuário que está na fase de {$objetivo}. Considere que o gasto calórico total diário desse usuário é de {$gasto_calorico} calorias. Com base nisso, defina um {$acao} adequado.
 
-        // Chave da API
-        $apiKey = "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"; // Substitua pela sua chave
+A dieta também deve se aproximar das seguintes necessidades diárias de macronutrientes:
+- Carboidratos: {$carbo_necessarias}g
+- Proteínas: {$prot_necessarias}g
+- Gorduras: {$gord_necessarias}g
+
+Utilize exclusivamente os seguintes alimentos para montar a dieta: " . implode(", ", $alimentos) . ". A dieta deve ser dividida em exatamente {$refeicoes} refeições ao longo do dia.
+
+Para cada refeição, descreva de forma clara:
+- Os alimentos incluídos;
+- As quantidades aproximadas;
+- Os valores nutricionais de cada item (calorias, carboidratos, proteínas e gorduras).
+
+Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
+
+        // API OpenRouter
+        $apiKey = "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";
         $url = "https://openrouter.ai/api/v1/chat/completions";
 
         $data = [
@@ -109,9 +126,13 @@
         $resposta = json_decode($response, true);
         $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível gerar a dieta.";
 
-        echo "<p><strong>Gasto calórico estimado da dieta:</strong> " . htmlspecialchars($gasto_calorico) . " kcal</p>";
+        echo "<p><strong>Seu gasto calórico:</strong> " . htmlspecialchars($gasto_calorico) . " kcal</p>";
         echo "<p><strong>Objetivo:</strong> " . ucfirst(htmlspecialchars($objetivo)) . "</p>";
         echo "<p><strong>Refeições por dia:</strong> " . htmlspecialchars($refeicoes) . "</p>";
+        echo "<p><strong>Macronutrientes alvo:</strong><br>
+              Carboidratos: {$carbo_necessarias}g<br>
+              Proteínas: {$prot_necessarias}g<br>
+              Gorduras: {$gord_necessarias}g</p>";
         echo "<h2>Dieta sugerida:</h2>";
         echo "<div class='dieta'>" . htmlspecialchars($dieta) . "</div>";
     }
