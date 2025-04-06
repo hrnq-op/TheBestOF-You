@@ -95,7 +95,7 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-$apiKey = "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";
+$apiKey = "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";
 $url = "https://openrouter.ai/api/v1/chat/completions";
 
 $data = [
