@@ -30,7 +30,7 @@
     session_start();
 
     // Simula o ID do usuário (use sessão real no sistema final)
-    $id_usuario = $_SESSION['id_usuario'] ?? 1;
+    $id_usuario = $_SESSION['usuario_id'] ?? null;
 
     $alimentosEscolhidos = [];
     $refeicoes = 0;
@@ -88,9 +88,8 @@
                     $id_alimento = obterIdAlimento($conexao, $alimento, $id_dieta);
 
                     if (!$id_alimento) {
-                        $quantidade = 1; // ou 0, se preferir
-                        $stmt = $conexao->prepare("INSERT INTO alimentos (nome, quantidade, id_dieta) VALUES (?, ?, ?)");
-                        $stmt->bind_param("sii", $alimento, $quantidade, $id_dieta);
+                        $stmt = $conexao->prepare("INSERT INTO alimentos (nome, id_dieta) VALUES (?, ?)");
+                        $stmt->bind_param("si", $alimento, $id_dieta);
                         $stmt->execute();
                         $stmt->close();
                     }
