@@ -45,7 +45,7 @@ if (count($_POST) > 0) {
         }
     }
 }
-?>
+?>  
 
 <!DOCTYPE html>
 
@@ -56,8 +56,10 @@ if (count($_POST) > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
 </head>
+<link rel="stylesheet" href="cadastrar.css">
 
 <body>
+    <div class="form-container">
     <h1>Cadastrar usuario</h1>
     <form method="POST" action="">
 
@@ -77,6 +79,7 @@ if (count($_POST) > 0) {
         <p>Já possui uma conta?</p> <a href="login.php">Login</a><br>
 
     </form>
+</div>
 </body>
 
 </html>
