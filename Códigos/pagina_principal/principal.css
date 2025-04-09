@@ -8,8 +8,8 @@
 /* Corpo da página */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #2c2c54; /* Azul escuro */
+    color: #e0ffe0;
     line-height: 1.6;
 }
 
@@ -19,8 +19,8 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #1a1a2e;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 header .logo img {
@@ -34,7 +34,7 @@ header .site-name {
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #ffffff;
 }
 
 nav.menu {
@@ -44,14 +44,14 @@ nav.menu {
 
 nav.menu a {
     text-decoration: none;
-    color: #555;
+    color: #cccccc;
     font-weight: bold;
     font-size: 18px;
     transition: color 0.3s ease;
 }
 
 nav.menu a:hover {
-    color: #4CAF50;
+    color: #00ff88;
 }
 
 /* Caixa que contém o botão "Comece Agora" */
@@ -62,19 +62,19 @@ nav.menu a:hover {
 
 .btn-comecar {
     display: inline-block;
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: #6f63ff;
+    color: #ffffff;
     padding: 15px 40px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 30px;
     text-decoration: none;
     transition: background-color 0.3s ease;
-    margin-left: 10px; /* Espaçamento entre o Login e o botão Comece Agora */
+    margin-left: 10px;
 }
 
 .btn-comecar:hover {
-    background-color: #45a049;
+    background-color: #5a54d1;
 }
 
 /* Estilo para o texto introdutório */
@@ -82,8 +82,8 @@ nav.menu a:hover {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #1a1a2e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
 }
 
@@ -91,18 +91,21 @@ nav.menu a:hover {
     font-size: 36px;
     text-align: center;
     margin-bottom: 20px;
+    color: #ffffff;
 }
 
 .intro p {
     font-size: 18px;
     line-height: 1.8;
     margin-bottom: 15px;
+    color: #e0ffe0;
 }
 
 .intro ul {
     list-style-type: none;
     padding: 0;
     font-size: 18px;
+    color: #e0ffe0;
 }
 
 .intro ul li {
@@ -110,19 +113,19 @@ nav.menu a:hover {
 }
 
 .intro strong {
-    color: #4CAF50; /* Destaca os termos importantes */
+    color: #00ff88; /* Destaque */
 }
 
 /* Footer */
 footer {
-    background-color: #ffffff;
+    background-color: #1a1a2e;
     padding: 20px;
     text-align: center;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #3a3a6a;
 }
 
 footer p {
-    color: #777;
+    color: #cccccc;
 }
 
 /* Responsividade */

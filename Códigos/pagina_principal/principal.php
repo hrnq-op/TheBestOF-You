@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheBestOF-You</title>
     <link href="principal.css" rel="stylesheet">
 </head>
+
 <body>
 
     <header>
         <div class="logo">
-            <img src="baixados.jpg" alt="Logo"> <!-- Logo do site -->
+            <img src="imagens/logo.png" alt="Logo"> <!-- Logo do site -->
         </div>
         <div class="site-name">
             TheBestOF-You <!-- Nome do site no centro -->
         </div>
         <nav class="menu">
             <div class="auth-container">
-                <a href="login.php" class="auth-btn">Login</a>
+                <a href="../login/login.php" class="auth-btn">Login</a>
                 <a href="cadastrar.php" class="auth-btn btn-comecar">Comece Agora</a>
             </div>
         </nav>
@@ -52,4 +54,5 @@
     </footer>
 
 </body>
+
 </html>
