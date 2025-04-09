@@ -7,7 +7,7 @@ function limpar_texto($str)
 
 if (count($_POST) > 0) {
 
-    include('conexao.php');
+    include('../conexao.php');
     $erro = false;
 
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
@@ -40,12 +40,12 @@ if (count($_POST) > 0) {
             echo "<script>alert('Cadastro realizado com sucesso!');</script>";
             unset($_POST);
             // Redireciona para a página de login após o alert
-            echo "<script>window.location.href = 'login.php';</script>";
+            echo "<script>window.location.href = '../login/login.php';</script>";
             exit(); // Garante que o script pare aqui após o redirecionamento
         }
     }
 }
-?>  
+?>
 
 <!DOCTYPE html>
 
@@ -60,26 +60,26 @@ if (count($_POST) > 0) {
 
 <body>
     <div class="form-container">
-    <h1>Cadastrar usuario</h1>
-    <form method="POST" action="">
+        <h1>Cadastrar usuario</h1>
+        <form method="POST" action="">
 
-        <label>Nome:</label>
-        <input value="<?php if (isset($_POST['nome'])) echo $_POST['nome']; ?>" type="text" name="nome"><br><br>
+            <label>Nome:</label>
+            <input value="<?php if (isset($_POST['nome'])) echo $_POST['nome']; ?>" type="text" name="nome"><br><br>
 
-        <label>E-mail:</label>
-        <input value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" type="text" name="email"><br><br>
+            <label>E-mail:</label>
+            <input value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" type="text" name="email"><br><br>
 
-        <label>Telefone:</label>
-        <input value="<?php if (isset($_POST['telefone'])) echo $_POST['telefone']; ?>" placeholder="(12) 98888-8888" type="text" name="telefone"><br><br>
+            <label>Telefone:</label>
+            <input value="<?php if (isset($_POST['telefone'])) echo $_POST['telefone']; ?>" placeholder="(12) 98888-8888" type="text" name="telefone"><br><br>
 
-        <label>Senha :</label>
-        <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha"><br><br>
+            <label>Senha :</label>
+            <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha"><br><br>
 
-        <button type="submit" name="enviar">Cadastrar</button> <br><br>
-        <p>Já possui uma conta?</p> <a href="login.php">Login</a><br>
+            <button type="submit" name="enviar">Cadastrar</button> <br><br>
+            <p>Já possui uma conta?</p> <a href="../login/login.php">Login</a><br>
 
-    </form>
-</div>
+        </form>
+    </div>
 </body>
 
 </html>

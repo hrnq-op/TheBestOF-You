@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,7 @@
 
     <form method="post" action="">
 
-    <h1>login</h1>
+        <h1>login</h1>
 
         <div class="input-container">
             <i class="fas fa-envelope"></i>
@@ -27,7 +28,7 @@
 
         <div class="input-container">
             <i class="fas fa-lock"></i>
-            <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha"  placeholder="Senha">
+            <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha" placeholder="Senha">
         </div>
 
         <div class="buttonLogin">
@@ -35,7 +36,7 @@
         </div>
 
         <div class="cadastroLogin">
-            <span>Não Possui Conta? <a href="cadastrar.php">Cadastre-se</a></span>
+            <span>Não Possui Conta? <a href="../cadastrar/cadastrar.php">Cadastre-se</a></span>
         </div>
 
     </form>
@@ -52,7 +53,7 @@ session_start();
 
 if (count($_POST) > 0) {
 
-    include('conexao.php');
+    include('../conexao.php');
     $erro = false;
 
     $senha = $_POST['senha'];
@@ -68,7 +69,7 @@ if (count($_POST) > 0) {
         $_SESSION['usuario_id'] = $usuario['id_usuario'];
 
         // Redireciona para a página usuario.php após o login bem-sucedido
-        header("Location: usuario.php");
+        header("Location: ../usuario/usuario.php");
         exit();
     } else {
         echo "Falha no login!! Senha ou E-mail incorretos";
