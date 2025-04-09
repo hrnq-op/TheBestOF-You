@@ -76,7 +76,11 @@ if (count($_POST) > 0) {
             <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha"><br><br>
 
             <button type="submit" name="enviar">Cadastrar</button> <br><br>
-            <p>Já possui uma conta?</p> <a href="../login/login.php">Login</a><br>
+            <p>Já possui uma conta?</p>
+            <div class="login-link">
+                <a href="../login/login.php">Login</a>
+            </div>
+
 
         </form>
     </div>
