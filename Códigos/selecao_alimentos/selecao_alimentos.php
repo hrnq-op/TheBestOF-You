@@ -26,7 +26,7 @@
 
     <?php
     ob_start();
-    include "conexao.php";
+    include('../conexao.php');
     session_start();
 
     // Simula o ID do usuário (use sessão real no sistema final)
@@ -100,7 +100,7 @@
         $conexao->close();
 
         // Redireciona para montagem da dieta
-        header("Location: montagem_dieta.php");
+        header("Location: ../montagem_dieta/montagem_dieta.php");
         exit();
     }
     ?>

@@ -59,7 +59,7 @@
         exit();
     }
 
-    include "conexao.php";
+    include('../conexao.php');
 
     if (isset($_POST['calcular'])) {
 
@@ -209,7 +209,7 @@
             }
         }
 
-        header("Location: selecao_alimentos.php");
+        header("Location: ../selecao_alimentos/selecao_alimentos.php");
     }
     ?>
 </body>

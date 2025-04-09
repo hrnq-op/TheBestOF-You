@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "conexao.php";
+include('../conexao.php');
 
 if (!isset($_SESSION['usuario_id'])) {
     echo "<p>Erro: Usuário não está logado.</p>";
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
         $stmt->close();
         $conexao->close();
 
-        header("Location: treino.php");
+        header("Location: ../treino/treino.php");
         exit;
     } else {
         echo "<p>Erro ao salvar a dieta.</p>";
@@ -95,7 +95,7 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-$apiKey = "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";
+$apiKey = "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";
 $url = "https://openrouter.ai/api/v1/chat/completions";
 
 $data = [
