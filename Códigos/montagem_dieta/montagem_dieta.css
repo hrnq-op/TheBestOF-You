@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2c2c54; 
+    color: #fdfdfd;
+    padding: 30px;
+    line-height: 1.6;
+}
+
+h1, h2 {
+    color: #ffffff; 
+    margin-bottom: 15px;
+}
+
+h2 {
+    margin-top: 30px;
+}
+
+.dieta {
+    background-color: #1a1a2e; 
+    padding: 20px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    box-shadow: 0 0 10px rgba(180, 170, 255, 0.1);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.dieta:hover {
+    box-shadow: 0 0 15px rgba(180, 170, 255, 0.2);
+}
+
+.botoes {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    background-color: #6f63ff; 
+    color: white;
+}
+
+button:hover {
+    background-color: #5a54d1;
+    transform: scale(1.05);
+}
+
+button.salvar {
+    background-color: #6f63ff;
+}
+
+button.outra {
+    background-color: #3a3a6a;
+}
+
+button.outra:hover {
+    background-color: #4c4c8a;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+
+    .botoes {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}

@@ -69,7 +69,7 @@ if (count($_POST) > 0) {
         $_SESSION['usuario_id'] = $usuario['id_usuario'];
 
         // Redireciona para a página usuario.php após o login bem-sucedido
-        header("Location: ../usuario/usuario.php");
+        header("Location: ../pagina_principal/index.php");
         exit();
     } else {
         echo "Falha no login!! Senha ou E-mail incorretos";

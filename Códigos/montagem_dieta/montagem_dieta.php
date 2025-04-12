@@ -95,7 +95,7 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-$apiKey = "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";
+$apiKey = "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";
 $url = "https://openrouter.ai/api/v1/chat/completions";
 
 $data = [
@@ -135,43 +135,8 @@ $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível ge
 <head>
     <meta charset="UTF-8">
     <title>Dieta Gerada</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        .dieta {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            white-space: pre-wrap;
-        }
-
-        .botoes {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        }
-
-        button.salvar {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        button.outra {
-            background-color: #007BFF;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="montagem_dieta.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -189,19 +154,40 @@ $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível ge
     <div class="dieta"><?= nl2br(htmlspecialchars($dieta)) ?></div>
 
     <div class="botoes">
-        <!-- Botão AVANÇAR -->
-        <form method="post">
+
+        <form method="post" id="formSalvar">
             <input type="hidden" name="salvar_dieta" value="1">
             <input type="hidden" name="id_dieta" value="<?= $id_dieta ?>">
             <input type="hidden" name="dieta_conteudo" value="<?= htmlspecialchars($dieta, ENT_QUOTES) ?>">
-            <button type="submit" class="salvar">Avançar</button>
+            <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
         </form>
 
-        <!-- Botão GERAR OUTRA -->
-        <form method="get">
-            <button type="submit" class="outra">Gerar outra dieta</button>
+
+        <form method="get" id="formGerar">
+            <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outra dieta</button>
         </form>
     </div>
+
+
+    <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+        <div style="color:white; font-size:24px;">
+            <i class="fas fa-spinner fa-spin"></i> Gerando dieta...
+        </div>
+    </div>
+
+
+    <script>
+        window.onload = function() {
+            const btnGerarOutra = document.getElementById('btnGerarOutra');
+            const spinner = document.getElementById('spinner');
+
+            if (btnGerarOutra && spinner) {
+                btnGerarOutra.addEventListener('click', function() {
+                    spinner.style.display = 'flex';
+                });
+            }
+        }
+    </script>
 </body>
 
 </html>

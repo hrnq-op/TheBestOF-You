@@ -1,11 +1,37 @@
+<?php
+session_start(); // Inicia a sessão
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['usuario_id'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: ../login/login.php");
+    exit();
+}
+
+// Conecta ao banco de dados para buscar o nome do usuário
+include('../conexao.php');
+$id_usuario = $_SESSION['usuario_id']; // Obtém o ID do usuário da sessão
+$sql = "SELECT nome FROM usuario WHERE id_usuario = '$id_usuario' LIMIT 1";
+$resultado = $conexao->query($sql);
+
+if ($resultado && $resultado->num_rows > 0) {
+    // Recupera o nome do usuário
+    $usuario = $resultado->fetch_assoc();
+    $nome_usuario = $usuario['nome'];
+} else {
+    // Caso o usuário não seja encontrado (isso não deveria acontecer se a sessão estiver correta)
+    $nome_usuario = "Usuário não encontrado";
+}
+?>
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheBestOF-You</title>
-    <link href="principal.css" rel="stylesheet">
+    <title>Página Principal - The Best Of-YOU</title>
+    <link href="index.css?v=2" rel="stylesheet">
 </head>
 
 <body>
@@ -15,12 +41,19 @@
             <img src="imagens/logo.png" alt="Logo"> <!-- Logo do site -->
         </div>
         <div class="site-name">
-            TheBestOF-You <!-- Nome do site no centro -->
+            TheBestOF-You
         </div>
         <nav class="menu">
+            <div class="nav-links">
+                <!-- Alteração aqui para redirecionar para a página usuario.php na pasta usuario -->
+                <a href="../usuario/usuario.php" class="auth-btn">Dieta</a>
+                <a href="../treino/treino.php" class="auth-btn">Treino</a>
+                <a href="evolucao.php" class="auth-btn">Evolução</a>
+            </div>
             <div class="auth-container">
-                <a href="../login/login.php" class="auth-btn">Login</a>
-                <a href="cadastrar.php" class="auth-btn btn-comecar">Comece Agora</a>
+                <!-- Mostrar nome do usuário e opção de logout -->
+                <span class="user-box">Bem-vindo, <?php echo htmlspecialchars($nome_usuario); ?>!</span>
+                <a href="../login/logout.php" class="auth-btn">Sair</a>
             </div>
         </nav>
     </header>
@@ -44,7 +77,7 @@
 
             <!-- Botão Comece Agora na parte inferior -->
             <div class="btn-container-bottom">
-                <a href="cadastrar.php" class="btn-comecar">Comece Agora</a>
+                <a href="../usuario/usuario.php" class="btn-comecar">Comece Agora</a>
             </div>
         </section>
     </main>

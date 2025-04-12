@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Escolha de Alimentos</title>
+    <link rel="stylesheet" href="selecao_alimentos.css">
     <style>
         table {
             width: 100%;
