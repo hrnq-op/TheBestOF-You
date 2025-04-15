@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06/04/2025 às 03:15
+-- Tempo de geração: 15/04/2025 às 02:40
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -33,20 +33,6 @@ CREATE TABLE `alimentos` (
   `id_dieta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `alimentos`
---
-
-INSERT INTO `alimentos` (`id_alimentos`, `nome`, `id_dieta`) VALUES
-(1, 'Pão', 1),
-(2, 'Ovo', 1),
-(3, 'Frango', 1),
-(4, 'Arroz', 1),
-(5, 'Feijão', 1),
-(6, 'Leite', 1),
-(7, 'Aveia', 1),
-(8, 'Açucar', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -62,13 +48,6 @@ CREATE TABLE `dieta` (
   `refeicoes` int(11) NOT NULL,
   `dieta` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `dieta`
---
-
-INSERT INTO `dieta` (`id_dieta`, `data_inicio`, `id_usuario`, `objetivo`, `situacao`, `refeicoes`, `dieta`) VALUES
-(1, '2025-04-06', 1, 'cutting', 'A', 5, 'dietas_salvas/dieta_usuario_1_dieta_1_1743902041.txt');
 
 -- --------------------------------------------------------
 
@@ -148,14 +127,6 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `usuario`
---
-
-INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$s76OCTUbGvYBPv4f0qBGxulDhLgV06FtcT2jFUIyuQYwMWuoqbQOK', 16, 90, 176, 2047.96, 1.55, 3174.34, 'masculino', 'harris', 'Henrique', '64984355664', 270, 162, 45),
-(2, 'isaac.santos@estudante.ifgoinano.edu.br', '$2y$10$4v/ScuJSmJTPXsYQHxjWnu/vYF5ToK52Vn.bBMSLIpY4kUx8s8NcK', 17, 64, 176, 1693.86, 1.375, 2329.06, 'masculino', 'harris', 'Isaac', '11998765432', 256, 128, 64);
-
---
 -- Índices para tabelas despejadas
 --
 
@@ -215,13 +186,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `alimentos`
 --
 ALTER TABLE `alimentos`
-  MODIFY `id_alimentos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_alimentos` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `dieta`
 --
 ALTER TABLE `dieta`
-  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `evolucao`
@@ -251,7 +222,7 @@ ALTER TABLE `treino_exercicio`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

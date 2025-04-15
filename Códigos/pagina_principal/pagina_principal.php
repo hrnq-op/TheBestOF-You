@@ -82,6 +82,16 @@ if (isset($_SESSION['id_usuario'])) {
             </div>
         </section>
     </main>
+    <div class="benefit-container">
+    <h2>Benefícios para pacientes</h2>
+        <ul class="benefits-list">
+            <li>✔️ Plano alimentar na palma da mão</li>
+            <li>✔️ Receitas</li>
+            <li>✔️ Acompanhamento da sua evolução</li>
+            <li>✔️ Sugestões de treino </li>
+        </ul>
+            
+    </div>
 
     <footer>
         <p>&copy; 2025 TheBestOF-You. Todos os direitos reservados.</p>

@@ -5,49 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcular Metabolismo Basal</title>
+    <link rel="stylesheet" href="usuario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+</head>
+<header>
+    <div class="logo">
+        <img src="../pagina_principal/imagens/logo.png" alt="Logo"> <!-- Logo do site -->
+    </div>
+    <div class="site-name">
+        TheBestOF-You
+    </div>
+    <nav class="menu">
+        <div class="nav-links">
+            <!-- Alteração aqui para redirecionar para a página usuario.php na pasta usuario -->
+            <a href="../usuario/usuario.php" class="auth-btn">Dieta</a>
+            <a href="../treino/treino.php" class="auth-btn">Treino</a>
+            <a href="../evolucao.php" class="auth-btn">Evolução</a>
+        </div>
+    </nav>
+</header>
 
 <body>
-    <h2>Preencha as informações abaixo</h2>
+    <h2>Preencha as informações abaixo:</h2>
 
-    <form method="post">
-        <label>Peso Atual (kg):</label> <input type="number" name="peso" step="0.1" required><br><br>
 
-        <label>Altura (cm):</label> <input type="number" name="altura" required><br><br>
+    <form method="post" class="form-usu">
+        <label>Peso Atual (kg):</label>
+        <i class="fas fa-weight icon"></i>
+        <input type="number" name="peso" step="0.1" class="animated-select" required><br><br>
 
-        <label>Idade:</label> <input type="number" name="idade" required><br><br>
+        <label>Altura (cm):</label>
+        <i class="fas fa-ruler-vertical icon"></i>
+        <input type="number" name="altura" class="animated-select" required><br><br>
+
+        <label>Idade:</label>
+        <i class="fas fa-calendar-alt icon"></i>
+        <input type="number" name="idade" class="animated-select" required><br><br>
 
         <label>Sexo:</label>
-        <select name="sexo" required>
+        <select name="sexo" class="animated-select" required>
             <option value="masculino">Masculino</option>
             <option value="feminino">Feminino</option>
-        </select><br><br>
+        </select>
 
         <label>Protocolo:</label>
-        <select name="protocolo" required>
+        <i class="fas fa-book icon"></i>
+        <select name="protocolo" class="animated-select" required>
             <option value="harris">Harris-Benedict (Geral, populações variadas)</option>
             <option value="mifflin">Mifflin-St Jeor (Mais precisa para indivíduos comuns)</option>
             <option value="cunningham">Cunningham (Melhor para atletas e fisiculturistas)</option>
             <option value="owen">Owen (Estimativa rápida, menos precisa)</option>
         </select><br><br>
 
+
         <label>Nível de Atividade Física:</label>
-        <select name="nivel_atv_fisica" required>
+        <select name="nivel_atv_fisica" class="animated-select" required>
             <option value="1.2">Sedentário (pouca ou nenhuma atividade física)</option>
             <option value="1.375">Leve (1 a 3 dias por semana de exercício leve)</option>
             <option value="1.55">Moderado (3 a 5 dias por semana de treino moderado)</option>
             <option value="1.725">Ativo (treino intenso 6 a 7 dias por semana)</option>
             <option value="1.9">Muito Ativo (atletas ou trabalho físico pesado)</option>
-        </select><br><br>
+        </select>
 
         <label>Objetivo:</label>
-        <select name="objetivo" required>
-            <option value="cutting">Cutting (definição, déficit calórico)</option>
-            <option value="bulking">Bulking (ganho de massa, superávit calórico)</option>
-            <option value="manutencao">Manutenção (manter o peso atual)</option>
-        </select><br><br>
-
-        <button type="submit" name="calcular">Calcular</button>
+        <select name="objetivo" class="animated-select" required>
+            <option value="cutting">Cutting</option>
+            <option value="bulking">Bulking</option>
+            <option value="manutencao">Manutenção</option>
+        </select>
+        <div class="button_container">
+            <button type="submit" name="calcular" class="animated-select">
+                <i class="fas fa-calculator icon"></i> Calcular
+            </button>
+        </div>
     </form>
 
     <?php
@@ -55,11 +86,18 @@
 
     // Verificar se o usuário está logado
     if (!isset($_SESSION['usuario_id'])) {
-        header("Location: ../login/login.php");
+        header("Location: login.php");
         exit();
+    }
+    if (isset($_SESSION['mensagem'])) {
+        echo '<div class="php-message">' . $_SESSION['mensagem'] . '</div>';
+        unset($_SESSION['mensagem']);
     }
 
     include('../conexao.php');
+    $id_usuario = $_SESSION['usuario_id']; // Obtém o ID do usuário da sessão
+    $sql = "SELECT nome FROM usuario WHERE id_usuario = '$id_usuario' LIMIT 1";
+    $resultado = $conexao->query($sql);
 
     if (isset($_POST['calcular'])) {
 
@@ -99,10 +137,16 @@
 
         $tmb_total = $mb * $nivel_atv;
 
-        echo "<h3>Seu metabolismo basal é: " . round($mb, 2) . " kcal/dia</h3>";
-        echo "<h3>Seu gasto calórico total (TMB + nível de atividade) é: " . round($tmb_total, 2) . " kcal/dia</h3>";
+        echo "
+        <div class='php-message'>
+            <strong>Seu metabolismo basal é:</strong> " . round($mb, 2) . " kcal/dia<br>
+            <strong>Seu gasto calórico total (TMB + nível de atividade) é:</strong> " . round($tmb_total, 2) . " kcal/dia
+        </div>";
 
-        echo "<form method='post'>
+
+        echo "
+        
+        <form method='post' class='avancar'>
         <input type='hidden' name='peso' value='$peso'>
         <input type='hidden' name='altura' value='$altura'>
         <input type='hidden' name='idade' value='$idade'>
@@ -112,7 +156,7 @@
         <input type='hidden' name='objetivo' value='$objetivo'>
         <input type='hidden' name='mb' value='$mb'>
         <input type='hidden' name='tmb_total' value='$tmb_total'>
-        <button type='submit' name='avancar'>Avançar</button>
+        <button type='submit' name='avancar' class='btn-avc'>Avançar</button>
     </form>";
     }
 
@@ -212,6 +256,7 @@
         header("Location: ../selecao_alimentos/selecao_alimentos.php");
     }
     ?>
+    <script src="script.js"></script>
 </body>
 
 </html>

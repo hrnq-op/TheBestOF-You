@@ -1,6 +1,6 @@
 /* Reset de estilos básicos */
 * {
-    margin: 0;
+    
     padding: 0;
     box-sizing: border-box;
 }
@@ -13,20 +13,55 @@ body {
     line-height: 1.6;
 }
 
+.benefit-container {
+    margin: 60px auto;
+    background-color: #1a1a2e;
+    border-radius: 20px;
+    padding: 40px 60px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    max-width: 800px; /* Igual à .intro */
+    width: 90%;
+    color: #e6e6fa;
+    text-align: center;
+}
+
+
+
+.benefit-container h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+}
+
+.benefits-list li {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
 /* Cabeçalho */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 50px;
-    background-color: #1a1a2e;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1a1a2e;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 header .logo img {
     max-width: 100px;
-    height: auto;
     margin-right: 20px;
+    
 }
 
 header .site-name {
@@ -39,7 +74,8 @@ header .site-name {
 
 nav.menu {
     display: flex;
-    gap: 20px;
+    gap: 50px;
+    padding: 0 30px;
 }
 
 nav.menu a {
@@ -48,6 +84,7 @@ nav.menu a {
     font-weight: bold;
     font-size: 18px;
     transition: color 0.3s ease;
+    padding: 10px 0;
 }
 
 nav.menu a:hover {

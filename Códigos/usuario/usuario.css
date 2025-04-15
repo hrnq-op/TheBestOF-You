@@ -1,0 +1,196 @@
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2c2c54; /* Azul escuro */
+    margin: 0;
+}
+
+h2 {
+    background-color: #1a1a2e;
+    color: #fdfdfd; /* Branco */
+    border-radius: 10px; /* Igual ao form */
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 10px; /* Igual ao form */
+    max-width: 400px;
+    padding: 1rem;
+    margin: 100px auto 20px auto; /* Centralizado e com espaçamento */
+    text-align: center;
+}
+
+
+/* Estilos do formulário */
+form.form-usu {
+    background-color: #1a1a2e; /* Roxo escuro */
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 10px;
+    max-width: 400px;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: auto;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 99%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a2e;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+    padding: 6px 12px; /* Cabeçalho mais compacto */
+    height: 50px;
+    margin: 0;
+}
+
+label{
+    color: #ffffff;
+}
+
+header .logo img {
+    max-width: 135px; /* Aumentado de 60px */
+    margin-right: 10px;
+}
+
+header .site-name {
+    flex: 1;
+    text-align: center;
+    font-size: 18px; /* Cabeçalho mais compacto */
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    border-radius: 5px;
+}
+
+.back-button {
+    background-color: #6f63ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Remove sublinhado */
+    outline: none;          /* Remove contorno ao focar */
+}
+
+a.back-button {
+    text-decoration: none;
+    border: none;
+}
+
+
+.back-button i {
+    margin-right: 5px;
+}
+
+.back-button:hover {
+    background-color: #5a54d1; /* Hover roxo médio */
+}
+
+/* Estilos dos inputs e selects */
+input[type="number"],
+select {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+    border-radius: 4px;
+    background-color: #3a3a6a; /* Roxo escuro */
+    outline: none;
+    font-size: 0.8em;
+    height: 2.2rem;
+    border: none;
+    color: #ffffff;
+}
+
+/* Estilos para os selects */
+.animated-select {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animated-select.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Estilos do botão */
+button {
+    background-color: #6f63ff; /* Roxo forte */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin: 0;
+    gap: 10px;
+}
+
+.button_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #5a54d1; /* Hover roxo médio */
+}
+
+/* Estilos dos ícones */
+.icon {
+    margin-right: 1rem;
+    color: white;
+}
+
+.php-message {
+    color: #ffffff;
+    background-color: #1a1a2e;
+    padding: 1rem;
+    margin: 1rem auto ;
+    border-radius: 10px;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
+    text-align: center;
+    
+}
+
+.btn-avc{
+    background-color: #1a1a2e;
+    display: block;
+    justify-content: center;
+    font-size: 1rem;
+    max-width: 400px;
+    padding: 1rem;
+    margin: 0 auto;
+    border-radius: 15px;
+}
+
+h3 {
+    color: #ffffff;
+    background-color: #1a1a2e;
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 10px;
+    max-width: 400px;
+    text-align: center;
+}
+
+p {
+    color: #ffffff;
+    background-color: #1a1a2e;
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 10px;
+    max-width: 400px;
+    text-align: center;
+}
