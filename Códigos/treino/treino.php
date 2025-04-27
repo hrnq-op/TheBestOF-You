@@ -110,25 +110,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nivel_treino = $_POST['nivel_treino'];
     $id_usuario = $_SESSION['id_usuario'];
 
+    // Verifique se o valor de enfase está vindo corretamente
+    $enfase = isset($_POST['enfase']) && !empty($_POST['enfase']) ? trim($_POST['enfase']) : null;
+
     if (isset($_POST['divisao_escolhida'])) {
         $divisao_escolhida = $_POST['divisao_escolhida'];
 
-        $sql = "INSERT INTO treino (id_usuario, divisao_treino, dias_de_treino, nivel_de_treino) VALUES (?, ?, ?, ?)";
+        // A query agora já deve tratar $enfase corretamente
+        $sql = "INSERT INTO treino (id_usuario, divisao_treino, dias_de_treino, nivel_de_treino, enfase) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("isis", $id_usuario, $divisao_escolhida, $dias_treino, $nivel_treino);
+        // Use 's' para o parâmetro enfase (que pode ser NULL)
+        $stmt->bind_param("isiss", $id_usuario, $divisao_escolhida, $dias_treino, $nivel_treino, $enfase);
 
         if ($stmt->execute()) {
-            // Redireciona para a página de montagem de dieta
             header("Location: ../montagem_treino/montagem_treino.php");
             exit();
         } else {
-            $mensagem = "Erro ao salvar treino: " . $conexao->error;
+            $mensagem = "Erro ao salvar treino: " . $stmt->error;
         }
     } else {
         $divisoes_sugeridas = sugerirDivisoes($dias_treino, $nivel_treino);
         $mostrar_divisoes = true;
     }
 }
+
+
+
 
 function sugerirDivisoes($dias, $nivel)
 {
@@ -306,6 +313,8 @@ function sugerirDivisoes($dias, $nivel)
                         <option value="avancado">Avançado</option>
                     </select>
                 </div>
+                <label for="enfase">Deseja dar ênfase em algum grupamento muscular? (Separe por vírgula)</label><br>
+                <input type="text" name="enfase" id="enfase" placeholder="Ex: Peito, Ombros, Posterior" style="width: 100%; margin-bottom: 20px;"><br>
 
                 <button type="submit">Sugerir Divisão de Treino</button>
             </form>
@@ -324,6 +333,7 @@ function sugerirDivisoes($dias, $nivel)
                         <input type="hidden" name="divisao_escolhida" value="<?= $divisao ?>">
                         <input type="hidden" name="dias_treino" value="<?= $dias_treino ?>">
                         <input type="hidden" name="nivel_treino" value="<?= $nivel_treino ?>">
+                        <input type="hidden" name="enfase" value="<?= htmlspecialchars($enfase ?? '') ?>">
                         <button type="submit">Escolher esta divisão</button>
                     </form>
                 </div>

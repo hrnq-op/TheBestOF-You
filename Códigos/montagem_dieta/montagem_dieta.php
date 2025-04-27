@@ -11,12 +11,13 @@ $id_usuario = $_SESSION['id_usuario'];
 
 // 🟢 ETAPA 1: Se clicou em "Avançar"
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
-    $id_dieta = $_POST['id_dieta'] ?? null;
     $dieta_conteudo = $_POST['dieta_conteudo'] ?? '';
+    $objetivo = $_POST['objetivo'] ?? '';
+    $refeicoes = $_POST['refeicoes'] ?? 0;
 
-    if ($id_dieta && !empty($dieta_conteudo)) {
+    if (!empty($dieta_conteudo) && !empty($objetivo)) {
         // Criar e salvar arquivo .txt
-        $nome_arquivo = "dieta_usuario_{$id_usuario}_dieta_{$id_dieta}_" . time() . ".txt";
+        $nome_arquivo = "dieta_usuario_{$id_usuario}_" . time() . ".txt";
         $caminho_arquivo = "dietas_salvas/" . $nome_arquivo;
 
         if (!file_exists("dietas_salvas")) {
@@ -25,9 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
 
         file_put_contents($caminho_arquivo, $dieta_conteudo);
 
-        // Atualizar caminho na tabela
-        $stmt = $conexao->prepare("UPDATE dieta SET dieta = ? WHERE id_dieta = ?");
-        $stmt->bind_param("si", $caminho_arquivo, $id_dieta);
+        // Inserir nova dieta
+        $data_inicio = date('Y-m-d');
+        $situacao = 'A'; // Ativa
+
+        $stmt = $conexao->prepare("INSERT INTO dieta (data_inicio, id_usuario, objetivo, situacao, refeicoes, dieta) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sissis", $data_inicio, $id_usuario, $objetivo, $situacao, $refeicoes, $caminho_arquivo);
         $stmt->execute();
         $stmt->close();
         $conexao->close();
@@ -77,7 +81,7 @@ if (empty($alimentos)) {
     exit;
 }
 
-// Monta o prompt e gera dieta via API OpenAI
+// Prompt para gerar dieta
 $acao = ($objetivo === "cutting") ? "déficit calórico" : "superávit calórico";
 $prompt = "Elabore uma dieta personalizada para um usuário que está na fase de {$objetivo}. Considere que o gasto calórico total diário desse usuário é de {$gasto_calorico} calorias. Com base nisso, defina um {$acao} adequado.
 
@@ -95,7 +99,6 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-// Dados para a API do OpenAI
 $apiKey = "";
 $url = "https://api.openai.com/v1/chat/completions";
 
@@ -107,7 +110,7 @@ $data = [
     ]
 ];
 
-// Configurar cURL
+// cURL
 $ch = curl_init($url);
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -130,9 +133,8 @@ curl_close($ch);
 
 // Interpretar resposta
 $resposta = json_decode($response, true);
-$dieta = $resposta['choices'][0]['text'] ?? "Não foi possível gerar a dieta.";
+$dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível gerar a dieta.";
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -145,6 +147,7 @@ $dieta = $resposta['choices'][0]['text'] ?? "Não foi possível gerar a dieta.";
 </head>
 
 <body>
+
     <h1>Dieta Personalizada</h1>
     <p><strong>Gasto calórico:</strong> <?= htmlspecialchars($gasto_calorico) ?> kcal</p>
     <p><strong>Objetivo:</strong> <?= ucfirst(htmlspecialchars($objetivo)) ?></p>
@@ -159,27 +162,25 @@ $dieta = $resposta['choices'][0]['text'] ?? "Não foi possível gerar a dieta.";
     <div class="dieta"><?= nl2br(htmlspecialchars($dieta)) ?></div>
 
     <div class="botoes">
-
         <form method="post" id="formSalvar">
             <input type="hidden" name="salvar_dieta" value="1">
             <input type="hidden" name="id_dieta" value="<?= $id_dieta ?>">
             <input type="hidden" name="dieta_conteudo" value="<?= htmlspecialchars($dieta, ENT_QUOTES) ?>">
+            <input type="hidden" name="objetivo" value="<?= htmlspecialchars($objetivo, ENT_QUOTES) ?>">
+            <input type="hidden" name="refeicoes" value="<?= $refeicoes ?>">
             <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
         </form>
-
 
         <form method="get" id="formGerar">
             <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outra dieta</button>
         </form>
     </div>
 
-
     <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
         <div style="color:white; font-size:24px;">
             <i class="fas fa-spinner fa-spin"></i> Gerando dieta...
         </div>
     </div>
-
 
     <script>
         window.onload = function() {
@@ -193,6 +194,7 @@ $dieta = $resposta['choices'][0]['text'] ?? "Não foi possível gerar a dieta.";
             }
         }
     </script>
+
 </body>
 
 </html>
