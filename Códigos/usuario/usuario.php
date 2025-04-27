@@ -4,62 +4,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcular Metabolismo Basal</title>
+    <title>Coleta Informações</title>
     <link rel="stylesheet" href="usuario.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 </head>
 <header>
     <div class="logo">
-        <img src="../pagina_principal/imagens/logo.png" alt="Logo"> <!-- Logo do site -->
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+        </a>
     </div>
     <div class="site-name">
-        TheBestOF-You
+        Dieta
     </div>
-    <nav class="menu">
-        <div class="nav-links">
-            <!-- Alteração aqui para redirecionar para a página usuario.php na pasta usuario -->
-            <a href="../usuario/usuario.php" class="auth-btn">Dieta</a>
-            <a href="../treino/treino.php" class="auth-btn">Treino</a>
-            <a href="../evolucao.php" class="auth-btn">Evolução</a>
-        </div>
-    </nav>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+        </a>
+    </div>
 </header>
 
 <body>
     <h2>Preencha as informações abaixo:</h2>
 
 
-    <form method="post" class="form-usu">
-        <label>Peso Atual (kg):</label>
-        <i class="fas fa-weight icon"></i>
-        <input type="number" name="peso" step="0.1" class="animated-select" required><br><br>
+    <form method="post" id="form-calc" class="form-usu">
 
-        <label>Altura (cm):</label>
-        <i class="fas fa-ruler-vertical icon"></i>
-        <input type="number" name="altura" class="animated-select" required><br><br>
+        <div class="input-group">
+            <i class="fas fa-weight icon"></i>
+            <label>Peso Atual (kg):</label>
+        </div>
+        <input type="number" name="peso" step="0.1" class="animated-select" required>
 
-        <label>Idade:</label>
-        <i class="fas fa-calendar-alt icon"></i>
-        <input type="number" name="idade" class="animated-select" required><br><br>
+        <div class="input-group">
+            <i class="fas fa-ruler-vertical icon"></i>
+            <label>Altura (cm):</label>
+        </div>
+        <input type="number" name="altura" class="animated-select" required>
 
-        <label>Sexo:</label>
+        <div class="input-group">
+            <i class="fas fa-calendar-alt icon"></i>
+            <label>Idade:</label>
+        </div>
+        <input type="number" name="idade" class="animated-select" required>
+
+        <div class="input-group">
+            <i class="fas fa-venus-mars icon"></i>
+            <label>Sexo:</label>
+        </div>
         <select name="sexo" class="animated-select" required>
             <option value="masculino">Masculino</option>
             <option value="feminino">Feminino</option>
         </select>
 
-        <label>Protocolo:</label>
-        <i class="fas fa-book icon"></i>
+        <div class="input-group">
+            <i class="fas fa-book icon"></i>
+            <label>Protocolo:</label>
+        </div>
         <select name="protocolo" class="animated-select" required>
             <option value="harris">Harris-Benedict (Geral, populações variadas)</option>
             <option value="mifflin">Mifflin-St Jeor (Mais precisa para indivíduos comuns)</option>
             <option value="cunningham">Cunningham (Melhor para atletas e fisiculturistas)</option>
             <option value="owen">Owen (Estimativa rápida, menos precisa)</option>
-        </select><br><br>
+        </select>
 
-
-        <label>Nível de Atividade Física:</label>
+        <div class="input-group">
+            <i class="fas fa-running icon"></i>
+            <label>Nível de Atividade Física:</label>
+        </div>
         <select name="nivel_atv_fisica" class="animated-select" required>
             <option value="1.2">Sedentário (pouca ou nenhuma atividade física)</option>
             <option value="1.375">Leve (1 a 3 dias por semana de exercício leve)</option>
@@ -68,25 +81,32 @@
             <option value="1.9">Muito Ativo (atletas ou trabalho físico pesado)</option>
         </select>
 
-        <label>Objetivo:</label>
+        <div class="input-group">
+            <i class="fas fa-bullseye icon"></i>
+            <label>Objetivo:</label>
+        </div>
         <select name="objetivo" class="animated-select" required>
             <option value="cutting">Cutting</option>
             <option value="bulking">Bulking</option>
             <option value="manutencao">Manutenção</option>
         </select>
+
         <div class="button_container">
-            <button type="submit" name="calcular" class="animated-select">
-                <i class="fas fa-calculator icon"></i> Calcular
+            <button type="submit" name="calcular">
+                <i class="icon-button fas fa-calculator"></i> Calcular
             </button>
+
         </div>
+
     </form>
+
 
     <?php
     session_start();
 
     // Verificar se o usuário está logado
-    if (!isset($_SESSION['usuario_id'])) {
-        header("Location: login.php");
+    if (!isset($_SESSION['id_usuario'])) {
+        header("Location: ../login/login.php");
         exit();
     }
     if (isset($_SESSION['mensagem'])) {
@@ -95,7 +115,7 @@
     }
 
     include('../conexao.php');
-    $id_usuario = $_SESSION['usuario_id']; // Obtém o ID do usuário da sessão
+    $id_usuario = $_SESSION['id_usuario']; // Obtém o ID do usuário da sessão
     $sql = "SELECT nome FROM usuario WHERE id_usuario = '$id_usuario' LIMIT 1";
     $resultado = $conexao->query($sql);
 
@@ -193,7 +213,7 @@
             die("<h3>Erro: Falha na conexão com o banco de dados.</h3>");
         }
 
-        $sql_usuario_check = "SELECT id_usuario FROM usuario WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
+        $sql_usuario_check = "SELECT id_usuario FROM usuario WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
         $result_usuario_check = mysqli_query($conexao, $sql_usuario_check);
 
         if (mysqli_num_rows($result_usuario_check) > 0) {
@@ -209,7 +229,7 @@
                 prot_necessarias = '$prot_necessarias',
                 carbo_necessarias = '$carbo_necessarias',
                 gord_necessarias = '$gord_necessarias'
-                WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
+                WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
 
             if (mysqli_query($conexao, $sql_usuario)) {
                 echo "<p>Dados do usuário registrados com sucesso!</p>";
@@ -227,7 +247,7 @@
             }
         }
 
-        $sql_check = "SELECT id_dieta FROM dieta WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
+        $sql_check = "SELECT id_dieta FROM dieta WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
         $result = mysqli_query($conexao, $sql_check);
 
         if (mysqli_num_rows($result) > 0) {
@@ -235,7 +255,7 @@
                 objetivo = '$objetivo',
                 data_inicio = '$data_inicio',
                 situacao = '$situacao'
-                WHERE id_usuario = '" . $_SESSION['usuario_id'] . "'";
+                WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
 
             if (mysqli_query($conexao, $sql_dieta)) {
                 echo "<p>Objetivo e dados atualizados na tabela dieta com sucesso!</p>";
@@ -244,7 +264,7 @@
             }
         } else {
             $sql_dieta_insert = "INSERT INTO dieta (id_usuario, objetivo, data_inicio, situacao) 
-                                 VALUES ('" . $_SESSION['usuario_id'] . "', '$objetivo', '$data_inicio', '$situacao')";
+                                 VALUES ('" . $_SESSION['id_usuario'] . "', '$objetivo', '$data_inicio', '$situacao')";
 
             if (mysqli_query($conexao, $sql_dieta_insert)) {
                 echo "<p>Objetivo inserido na tabela dieta com sucesso!</p>";

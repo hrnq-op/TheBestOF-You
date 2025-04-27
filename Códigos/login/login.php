@@ -9,16 +9,14 @@
     <link rel="stylesheet" type="text/css" href="login.css">
 </head>
 
-<header>
-
-    <h1 class="titulo">The Best Of-YOU</h1>
-
-</header>
-
-<body style="background-color: #2c2c54;">
+<body>
+    <a href="../pagina_principal/pagina_principal.php" class="botao-voltar" title="Voltar para a página inicial">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="left-side"></div>
 
     <form method="post" action="">
-
+        <h1 class="titulo">The Best Of-YOU</h1>
         <h1>login</h1>
 
         <div class="input-container">
@@ -36,11 +34,11 @@
         </div>
 
         <div class="cadastroLogin">
-            <span>Não Possui Conta? <a href="../cadastrar/cadastrar.php">Cadastre-se</a></span>
+            <span>Não Possui Conta?</span><br>
+            <span> <a href="../cadastrar/cadastrar.php">Cadastre-se</a></span>
         </div>
-
     </form>
-
+    <img src="imagens/Imagem_login.png" alt="Imagem de Login">
 </body>
 
 </html>
@@ -66,7 +64,7 @@ if (count($_POST) > 0) {
     if ($usuario && password_verify($senha, $usuario['senha'])) {
 
         // Armazena o ID do usuário na sessão
-        $_SESSION['usuario_id'] = $usuario['id_usuario'];
+        $_SESSION['id_usuario'] = $usuario['id_usuario'];
 
         // Redireciona para a página usuario.php após o login bem-sucedido
         header("Location: ../pagina_principal/index.php");

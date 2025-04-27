@@ -2,12 +2,12 @@
 session_start();
 include('../conexao.php');
 
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['id_usuario'])) {
     echo "<p>Erro: Usuário não está logado.</p>";
     exit;
 }
 
-$id_usuario = $_SESSION['usuario_id'];
+$id_usuario = $_SESSION['id_usuario'];
 
 // 🟢 ETAPA 1: Se clicou em "Avançar"
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
         $stmt->close();
         $conexao->close();
 
-        header("Location: ../treino/treino.php");
+        header("Location: ../pagina_principal/index.php");
         exit;
     } else {
         echo "<p>Erro ao salvar a dieta.</p>";
@@ -77,7 +77,7 @@ if (empty($alimentos)) {
     exit;
 }
 
-// Monta o prompt e gera dieta via API
+// Monta o prompt e gera dieta via API OpenAI
 $acao = ($objetivo === "cutting") ? "déficit calórico" : "superávit calórico";
 $prompt = "Elabore uma dieta personalizada para um usuário que está na fase de {$objetivo}. Considere que o gasto calórico total diário desse usuário é de {$gasto_calorico} calorias. Com base nisso, defina um {$acao} adequado.
 
@@ -95,39 +95,44 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
+// Dados para a API do OpenAI
 $apiKey = "";
 $url = "https://api.openai.com/v1/chat/completions";
 
 $data = [
-    "model" => "mistralai/mistral-7b-instruct",
+    "model" => "gpt-3.5-turbo",
+    "store" => true,
     "messages" => [
-        ["role" => "system", "content" => "Você é um nutricionista especializado em dietas personalizadas com base em fases como cutting e bulking."],
         ["role" => "user", "content" => $prompt]
     ]
 ];
 
-$options = [
-    "http" => [
-        "header" => [
-            "Content-Type: application/json",
-            "Authorization: Bearer $apiKey"
-        ],
-        "method" => "POST",
-        "content" => json_encode($data),
-    ]
-];
+// Configurar cURL
+$ch = curl_init($url);
 
-$context = stream_context_create($options);
-$response = file_get_contents($url, false, $context);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json",
+    "Authorization: Bearer $apiKey"
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-if (!$response) {
-    echo "<p>Erro ao gerar a dieta. Verifique sua chave da API ou a conexão.</p>";
+$response = curl_exec($ch);
+
+if (curl_errno($ch)) {
+    echo "<p>Erro ao conectar com a API: " . curl_error($ch) . "</p>";
+    curl_close($ch);
     exit;
 }
 
+curl_close($ch);
+
+// Interpretar resposta
 $resposta = json_decode($response, true);
-$dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível gerar a dieta.";
+$dieta = $resposta['choices'][0]['text'] ?? "Não foi possível gerar a dieta.";
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">

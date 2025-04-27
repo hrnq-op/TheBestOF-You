@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Escolha de Alimentos</title>
-    <link rel="stylesheet" href="selecao_alimentos.css">
+    <link rel="stylesheet" href="selecao_alimentos.css?v=2">
     <style>
         table {
             width: 100%;
@@ -31,7 +31,7 @@
     session_start();
 
     // Simula o ID do usuário (use sessão real no sistema final)
-    $id_usuario = $_SESSION['usuario_id'] ?? null;
+    $id_usuario = $_SESSION['id_usuario'] ?? null;
 
     $alimentosEscolhidos = [];
     $refeicoes = 0;
