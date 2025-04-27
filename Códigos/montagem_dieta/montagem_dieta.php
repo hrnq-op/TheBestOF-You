@@ -95,7 +95,6 @@ Para cada refeição, descreva de forma clara:
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-// Dados para a API do OpenAI
 $apiKey = "";
 $url = "https://api.openai.com/v1/chat/completions";
 
