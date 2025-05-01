@@ -222,60 +222,27 @@ function sugerirDivisoes($dias, $nivel)
 <head>
     <meta charset="UTF-8">
     <title>Configuração de Treino</title>
-    <link href="treino.css?v=3" rel="stylesheet">
-    <style>
-        .divisao-card {
-            border: 1px solid #ccc;
-            padding: 16px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            background: white;
-        }
-
-        .divisao-card h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .divisao-card p {
-            margin-bottom: 10px;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .divisao-card button {
-            background-color: #27ae60;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .divisao-card button:hover {
-            background-color: #219653;
-        }
-
-        .info-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .mensagem {
-            padding: 10px;
-            background: #d4edda;
-            color: #155724;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="treino.css?v=2" rel="stylesheet">
 </head>
 
 <body>
+
+<header>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+        </a>
+    </div>
+    <div class="site-name">
+        Treino
+    </div>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+        </a>
+    </div>
+</header>
+
     <div class="container">
         <h1>Montagem do Seu Treino</h1>
 

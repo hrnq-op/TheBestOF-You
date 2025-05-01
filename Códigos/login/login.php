@@ -6,48 +6,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="login.css">
+    <link rel="stylesheet" type="text/css" href="login.css?=2">
 </head>
 
 <body>
     <a href="../pagina_principal/pagina_principal.php" class="botao-voltar" title="Voltar para a página inicial">
         <i class="fas fa-arrow-left"></i>
     </a>
-    <div class="left-side"></div>
 
-    <form method="post" action="">
-        <h1 class="titulo">The Best Of-YOU</h1>
-        <h1>login</h1>
+    <div class="form-section"> <!-- <- Aqui está a div que precisa envolver o conteúdo -->
+        <form method="post" action="">
+            <h1 class="titulo">The Best Of-YOU</h1>
+            <h1>Login</h1>
 
-        <div class="input-container">
-            <i class="fas fa-envelope"></i>
-            <input value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" type="text" name="email" placeholder="E-mail">
-        </div>
+            <div class="input-container">
+                <i class="fas fa-envelope"></i>
+                <input value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" type="text" name="email" placeholder="E-mail">
+            </div>
 
-        <div class="input-container">
-            <i class="fas fa-lock"></i>
-            <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha" placeholder="Senha">
-        </div>
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input value="<?php if (isset($_POST['senha'])) echo $_POST['senha']; ?>" type="password" name="senha" placeholder="Senha">
+            </div>
 
-        <div class="buttonLogin">
-            <button type="submit">Login</button>
-        </div>
+            <div class="buttonLogin">
+                <button type="submit">Login</button>
+            </div>
 
-        <div class="cadastroLogin">
-            <span>Não Possui Conta?</span><br>
-            <span> <a href="../cadastrar/cadastrar.php">Cadastre-se</a></span>
-        </div>
-    </form>
-    <img src="imagens/Imagem_login.png" alt="Imagem de Login">
+            <div class="cadastroLogin">
+                <span>Não possui conta?</span><br>
+                <span><a href="../cadastrar/cadastrar.php">Cadastre-se</a></span>
+            </div>
+        </form>
+
+
+    </div>
 </body>
+
 
 </html>
 
-
-
-
 <?php
 session_start();
+
+if (count($_POST) > 0) {
+    include('../conexao.php');
+    $erro = false;
+
+    $senha = $_POST['senha'];
+    $email = $_POST['email'];
+
+    $sql_code = "SELECT * FROM usuario WHERE email = '$email' LIMIT 1";
+    $sql_exec = $conexao->query($sql_code) or die($conexao->error);
+    $usuario = $sql_exec->fetch_assoc();
+
+    if ($usuario && password_verify($senha, $usuario['senha'])) {
+        $_SESSION['id_usuario'] = $usuario['id_usuario'];
+        header("Location: ../pagina_principal/index.php");
+        exit();
+    } else {
+        echo "Falha no login! Senha ou e-mail incorretos.";
+    }
+}
+?>
+
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 if (count($_POST) > 0) {
 

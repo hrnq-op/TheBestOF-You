@@ -142,12 +142,29 @@ $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível ge
 <head>
     <meta charset="UTF-8">
     <title>Dieta Gerada</title>
-    <link rel="stylesheet" href="montagem_dieta.css">
+    <link rel="stylesheet" href="montagem_dieta.css?=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
+<header>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+        </a>
+    </div>
+    <div class="site-name">
+        Dieta
+    </div>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+        </a>
+    </div>
+</header>
+
+<div class="qlqr">
     <h1>Dieta Personalizada</h1>
     <p><strong>Gasto calórico:</strong> <?= htmlspecialchars($gasto_calorico) ?> kcal</p>
     <p><strong>Objetivo:</strong> <?= ucfirst(htmlspecialchars($objetivo)) ?></p>
@@ -194,7 +211,7 @@ $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível ge
             }
         }
     </script>
-
+</div>
 </body>
 
 </html>

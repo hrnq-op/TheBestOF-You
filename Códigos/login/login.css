@@ -6,17 +6,27 @@
 }
 
 body {
-    background-color: #eeeef1;
+    background-image: url("imagens/fundo.png");
+    background-size: cover;           /* cobre toda a tela */
+    background-position: center;      /* centraliza a imagem */
+    background-repeat: no-repeat;     /* não repete */
+    height: 100vh;                    /* altura total da tela */
     display: flex;
-    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
+
 .form-section {
-    flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: #f5f5f5;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+    padding: 20px;
+    position: relative;
 }
 
 form {
@@ -24,7 +34,7 @@ form {
     padding: 30px 40px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 50%;
+    width: 100%;
     max-width: 390px;
     display: flex;
     flex-direction: column;
@@ -93,7 +103,7 @@ form h1 {
     left: 20px;
     background-color: transparent;
     border: none;
-    color: #ffffff;
+    color: #00c853;
     font-size: 2rem;
     cursor: pointer;
     text-decoration: none;
@@ -104,5 +114,10 @@ form h1 {
 }
 
 .botao-voltar:hover {
-    transform: scale(1.15);
+    transform: scale(1.15);
+}
+
+.buttonLogin {
+    text-align: center;
+    padding: 20px 0;
 }

@@ -31,7 +31,7 @@ if ($resultado && $resultado->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheBestOF-You</title>
-    <link href="index.css" rel="stylesheet">
+    <link href="index.css?=2" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 </head>
 

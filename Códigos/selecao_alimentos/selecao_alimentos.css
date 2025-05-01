@@ -5,78 +5,155 @@
     box-sizing: border-box;
 }
 
-/* Configurações gerais */
+/* Fonte e fundo geral */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f8fb; /* Cor de fundo mais leve e compatível com a principal */
-    color: #333; /* Cor de texto mais neutra */
-    padding: 30px;
-}
-
-h1, h2 {
-    color: #333; /* Cor de título mais compatível */
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-form {
-    background-color: #ffffff; /* Fundo claro para contrastar com o fundo escuro */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 0 auto 40px auto;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f8fb;
     color: #333;
+    line-height: 1.6;
 }
 
+/* Header */
+header {
+    background-color: white;
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    height: 120px;
+}
+
+.logo:first-child {
+    left: 20px;
+}
+
+.logo:last-child {
+    right: 20px;
+}
+
+.logo img {
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+.site-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 auto;
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* Título principal */
+h1, h2 {
+    text-align: center;
+    color: #333;
+    margin: 30px auto;
+    padding: 50px;
+    max-width: 600px;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Container do formulário */
+.qlqr {
+    margin-top: 30px;
+}
+
+/* Em vez de afetar todos os forms */
+form.form-caixa {
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 20px auto;
+    transition: all 0.3s ease;
+}
+
+
+/* Labels */
+label {
+    color: #333;
+    font-weight: 500;
+    display: block;
+    margin-top: 15px;
+}
+
+/* Inputs */
 input[type="text"],
 input[type="number"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 8px;
-    background-color: #3a3a6a; 
-    color: #ffffff;
+    padding: 12px 15px;
+    margin: 8px 0 15px;
+    border-radius: 6px;
+    background-color: #f0faf4;
+    border: 1px solid #00c853;
+    outline: none;
+    font-size: 0.9rem;
+    color: #333;
+    transition: all 0.3s ease;
 }
 
-input::placeholder {
-    color: #cccccc;
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #00a844;
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.2);
 }
 
+/* Botão */
 button {
-    width: 100%;
-    padding: 10px;
-    background-color: #00c853; /* Cor do botão mais próxima da principal */
-    color: #ffffff;
-    font-weight: bold;
+    background-color: #00c853;
+    color: white;
+    padding: 12px 25px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 button:hover {
     background-color: #00b44b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
+button:active {
+    transform: translateY(0);
+}
+
+/* Tabela de alimentos */
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
+    background-color: white;
     color: #333;
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     overflow: hidden;
+    margin-top: 20px;
 }
 
-th,
-td {
-    border: 1px solid #00c853; /* Bordas mais claras em verde */
+th, td {
+    border: 1px solid #00c853;
     padding: 10px;
     text-align: left;
 }
@@ -86,13 +163,130 @@ th {
     color: white;
 }
 
-/* Responsividade */
-@media (max-width: 600px) {
-    body {
-        padding: 15px;
+/* Botão avançar */
+.btn-avc {
+    background-color: #00c853;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-avc:hover {
+    background-color: #00b44b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Animações */
+.animated-select {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animated-select.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    header {
+        padding: 20px 15px;
+    }
+
+    .logo img {
+        height: 80px;
+    }
+
+    .site-name {
+        font-size: 1.5rem;
     }
 
     form {
-        width: 100%;
+        padding: 1.5rem;
+        margin: 20px 15px;
     }
+}
+
+/* Tabela dos alimentos escolhidos */
+.tabela-alimentos {
+    width: 100%;
+    max-width: 800px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tabela-alimentos th,
+.tabela-alimentos td {
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.tabela-alimentos th {
+    background-color: #00c853;
+    color: white;
+    font-weight: 600;
+    border-bottom: 2px solid #00b44b;
+}
+
+.tabela-alimentos td {
+    border-bottom: 1px solid #e0f7ea;
+    color: #333;
+    background-color: #f9fdfb;
+}
+
+.tabela-alimentos tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-alimentos td strong {
+    color: #00a844;
+}
+
+@media (max-width: 768px) {
+    .tabela-alimentos th, .tabela-alimentos td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .tabela-alimentos {
+        margin: 20px 10px;
+    }
+}
+
+/* Versão menor do botão */
+.btn-pequeno {
+    padding: 8px 18px;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    width: 150px;
 }

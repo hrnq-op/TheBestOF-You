@@ -218,6 +218,23 @@ foreach ($exercicios_extraidos as $nome_exercicio) {
 
 <body>
 
+<header>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+        </a>
+    </div>
+    <div class="site-name">
+        Treino
+    </div>
+    <div class="logo">
+        <a href="../pagina_principal/index.php">
+            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+        </a>
+    </div>
+</header>
+
+<div class="qlqr">
     <h1>Treino Personalizado</h1>
     <p><strong>Divisão de Treino:</strong> <?= htmlspecialchars($divisao_treino) ?></p>
     <p><strong>Nível de Treino:</strong> <?= ucfirst(htmlspecialchars($nivel_de_treino)) ?></p>
@@ -258,7 +275,7 @@ foreach ($exercicios_extraidos as $nome_exercicio) {
             }
         }
     </script>
-
+</div>
 </body>
 
 </html>

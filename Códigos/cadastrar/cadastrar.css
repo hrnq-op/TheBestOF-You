@@ -1,21 +1,37 @@
-body {
-    background-color: #eeeef1;
-    color: #2c2c54;
+* {
+    box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 0;
 }
 
-form {
+body {
+    background-image: url("imagens/fundo.png");
+    background-size: cover;           /* cobre toda a tela */
+    background-position: center;      /* centraliza a imagem */
+    background-repeat: no-repeat;     /* não repete */
+    height: 100vh;                    /* altura total da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Caixa mais justa com formulário centralizado */
+.form-container {
     background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    width: 50%;
-    max-width: 390px;
+    padding: 20px 25px; /* Reduzido */
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 320px; /* Mais estreita */
+    box-sizing: border-box;
+}
+
+/* Garantir centralização interna do form */
+form {
+    width: 100%;
 }
 
 h1 {
@@ -23,7 +39,7 @@ h1 {
     margin-bottom: 20px;
     color: #2c2c54;
     text-transform: uppercase;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 label {
@@ -34,12 +50,13 @@ label {
 
 input {
     width: 100%;
-    padding: 10px 10px 10px 35px;
-    margin-bottom: 15px;
+    padding: 8px 10px 8px 35px;
+    margin-bottom: 12px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 6px;
     background-color: #ffffff;
     color: #2c2c54;
+    box-sizing: border-box;
 }
 
 input::placeholder {
@@ -53,10 +70,10 @@ button {
     color: #ffffff;
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 button:hover {
@@ -101,4 +118,24 @@ p {
 
 .login-link a {
     color: #00c853;
+}
+
+.botao-voltar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: transparent;
+    border: none;
+    color: #00c853;
+    font-size: 2rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.botao-voltar:hover {
+    transform: scale(1.15);
 }

@@ -55,10 +55,16 @@ if (count($_POST) > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="cadastrar.css?=2">
 </head>
-<link rel="stylesheet" href="cadastrar.css">
+
 
 <body>
+    <a href="../pagina_principal/pagina_principal.php" class="botao-voltar" title="Voltar para a página inicial">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
     <div class="form-container">
         <h1>Cadastrar usuario</h1>
         <form method="POST" action="">
