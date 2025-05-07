@@ -31,7 +31,7 @@ if ($resultado && $resultado->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheBestOF-You</title>
-    <link href="index.css?=2" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 </head>
 
@@ -63,15 +63,15 @@ if ($resultado && $resultado->num_rows > 0) {
         <!-- Texto introdutório -->
         <section class="intro">
             <div class="intro-text">
-                <h1>O melhor software de Nutrição e Treino para otimizar seus resultados</h1>
+            <h1>Bem-vindo à sua jornada personalizada de saúde e performance</h1>
 
-                <p>O <strong>TheBestOF-You</strong> é a plataforma ideal para quem quer alcançar seus objetivos de saúde e bem-estar de forma personalizada. Criamos planos de <strong>dieta</strong> e <strong>treinos de musculação</strong> exclusivos para você, levando em consideração suas necessidades e metas.</p>
-                <p>Quer perder peso, ganhar massa muscular ou manter a forma? Nosso sistema inteligente vai ajudar a criar o plano perfeito para o seu perfil, com ajustes constantes para garantir que você continue evoluindo.</p>
+                <p>Agora que você está logado, já pode acessar seus planos personalizados de <strong>dieta</strong>, <strong>treino</strong> e acompanhar sua <strong>evolução</strong> em tempo real.</p>
+                <p>Estamos aqui para te ajudar em cada passo da sua jornada. Aproveite todas as funcionalidades disponíveis, atualize seu progresso e mantenha o foco nas suas metas. Vamos juntos conquistar o melhor de você!</p>
 
             </div>
 
             <div class="intro-image">
-                <img src="imagens/imagem1.png" alt="Imagem" style="max-width: 100%; margin-left: 50px; height: auto;">
+                <img src="imagens/imagem.png" alt="Imagem" style="max-width: 100%; margin-left: 50px; height: auto;">
             </div>
         </section>
 

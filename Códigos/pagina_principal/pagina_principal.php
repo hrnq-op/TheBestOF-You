@@ -60,7 +60,7 @@ if (isset($_SESSION['id_usuario'])) {
             </div>
 
             <div class="intro-image">
-                <img src="imagens/imagem1.png" alt="Imagem" style="max-width: 100%; margin-left: 50px; height: auto;">
+                <img src="imagens/Imagem1.png" alt="Imagem" style="max-width: 100%; margin-left: 30px; margin-right: 60px; margin-bottom: 60px; height: 450px;">
             </div>
         </section>
 
