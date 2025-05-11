@@ -81,8 +81,9 @@ if (empty($alimentos)) {
     exit;
 }
 
-// Prompt para gerar dieta
 $acao = ($objetivo === "cutting") ? "déficit calórico" : "superávit calórico";
+
+// Exemplo de prompt gerado dinamicamente
 $prompt = "Elabore uma dieta personalizada para um usuário que está na fase de {$objetivo}. Considere que o gasto calórico total diário desse usuário é de {$gasto_calorico} calorias. Com base nisso, defina um {$acao} adequado.
 
 A dieta também deve se aproximar das seguintes necessidades diárias de macronutrientes:
@@ -103,25 +104,25 @@ Ao final, forneça um resumo com o total calórico e de macronutrientes da dieta
 
 Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-$apiKey = "";
-$url = "https://api.openai.com/v1/chat/completions";
+$apiKey = ''; // Substitua pela sua chave real
 
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey";
+
+// Corpo da requisição no formato da API do Gemini
 $data = [
-    "model" => "gpt-3.5-turbo",
-    "store" => true,
-    "messages" => [
-        ["role" => "user", "content" => $prompt]
-    ]
+    "contents" => [[
+        "role" => "user",
+        "parts" => [["text" => $prompt]]
+    ]]
 ];
 
-// cURL
-$ch = curl_init($url);
 
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json",
-    "Authorization: Bearer $apiKey"
-]);
+// Início da requisição cURL
+$ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json"
+]);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -137,7 +138,10 @@ curl_close($ch);
 
 // Interpretar resposta
 $resposta = json_decode($response, true);
-$dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível gerar a dieta.";
+
+// A resposta da Gemini vem em 'candidates' → 'content' → 'parts'
+$dieta = $resposta['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar a dieta.";
+
 ?>
 
 <!DOCTYPE html>
@@ -152,70 +156,70 @@ $dieta = $resposta['choices'][0]['message']['content'] ?? "Não foi possível ge
 
 <body>
 
-<header>
-    <div class="logo">
-        <a href="../pagina_principal/index.php">
-            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
-        </a>
-    </div>
-    <div class="site-name">
-        Dieta
-    </div>
-    <div class="logo">
-        <a href="../pagina_principal/index.php">
-            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
-        </a>
-    </div>
-</header>
-
-<div class="qlqr">
-    <h1>Dieta Personalizada</h1>
-    <p><strong>Gasto calórico:</strong> <?= htmlspecialchars($gasto_calorico) ?> kcal</p>
-    <p><strong>Objetivo:</strong> <?= ucfirst(htmlspecialchars($objetivo)) ?></p>
-    <p><strong>Refeições por dia:</strong> <?= $refeicoes ?></p>
-    <p><strong>Macronutrientes alvo:</strong><br>
-        Carboidratos: <?= $carbo_necessarias ?>g<br>
-        Proteínas: <?= $prot_necessarias ?>g<br>
-        Gorduras: <?= $gord_necessarias ?>g
-    </p>
-
-    <h2>Dieta sugerida:</h2>
-    <div class="dieta"><?= nl2br(htmlspecialchars($dieta)) ?></div>
-
-    <div class="botoes">
-        <form method="post" id="formSalvar">
-            <input type="hidden" name="salvar_dieta" value="1">
-            <input type="hidden" name="id_dieta" value="<?= $id_dieta ?>">
-            <input type="hidden" name="dieta_conteudo" value="<?= htmlspecialchars($dieta, ENT_QUOTES) ?>">
-            <input type="hidden" name="objetivo" value="<?= htmlspecialchars($objetivo, ENT_QUOTES) ?>">
-            <input type="hidden" name="refeicoes" value="<?= $refeicoes ?>">
-            <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
-        </form>
-
-        <form method="get" id="formGerar">
-            <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outra dieta</button>
-        </form>
-    </div>
-
-    <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
-        <div style="color:white; font-size:24px;">
-            <i class="fas fa-spinner fa-spin"></i> Gerando dieta...
+    <header>
+        <div class="logo">
+            <a href="../pagina_principal/index.php">
+                <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+            </a>
         </div>
-    </div>
+        <div class="site-name">
+            Dieta
+        </div>
+        <div class="logo">
+            <a href="../pagina_principal/index.php">
+                <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+            </a>
+        </div>
+    </header>
 
-    <script>
-        window.onload = function() {
-            const btnGerarOutra = document.getElementById('btnGerarOutra');
-            const spinner = document.getElementById('spinner');
+    <div class="qlqr">
+        <h1>Dieta Personalizada</h1>
+        <p><strong>Gasto calórico:</strong> <?= htmlspecialchars($gasto_calorico) ?> kcal</p>
+        <p><strong>Objetivo:</strong> <?= ucfirst(htmlspecialchars($objetivo)) ?></p>
+        <p><strong>Refeições por dia:</strong> <?= $refeicoes ?></p>
+        <p><strong>Macronutrientes alvo:</strong><br>
+            Carboidratos: <?= $carbo_necessarias ?>g<br>
+            Proteínas: <?= $prot_necessarias ?>g<br>
+            Gorduras: <?= $gord_necessarias ?>g
+        </p>
 
-            if (btnGerarOutra && spinner) {
-                btnGerarOutra.addEventListener('click', function() {
-                    spinner.style.display = 'flex';
-                });
+        <h2>Dieta sugerida:</h2>
+        <div class="dieta"><?= nl2br(htmlspecialchars($dieta)) ?></div>
+
+        <div class="botoes">
+            <form method="post" id="formSalvar">
+                <input type="hidden" name="salvar_dieta" value="1">
+                <input type="hidden" name="id_dieta" value="<?= $id_dieta ?>">
+                <input type="hidden" name="dieta_conteudo" value="<?= htmlspecialchars($dieta, ENT_QUOTES) ?>">
+                <input type="hidden" name="objetivo" value="<?= htmlspecialchars($objetivo, ENT_QUOTES) ?>">
+                <input type="hidden" name="refeicoes" value="<?= $refeicoes ?>">
+                <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
+            </form>
+
+            <form method="get" id="formGerar">
+                <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outra dieta</button>
+            </form>
+        </div>
+
+        <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+            <div style="color:white; font-size:24px;">
+                <i class="fas fa-spinner fa-spin"></i> Gerando dieta...
+            </div>
+        </div>
+
+        <script>
+            window.onload = function() {
+                const btnGerarOutra = document.getElementById('btnGerarOutra');
+                const spinner = document.getElementById('spinner');
+
+                if (btnGerarOutra && spinner) {
+                    btnGerarOutra.addEventListener('click', function() {
+                        spinner.style.display = 'flex';
+                    });
+                }
             }
-        }
-    </script>
-</div>
+        </script>
+    </div>
 </body>
 
 </html>
