@@ -133,6 +133,9 @@ if (curl_errno($ch)) {
     curl_close($ch);
     exit;
 }
+echo "<pre>";
+var_dump($response); // Adicione isso para ver a resposta bruta
+echo "</pre>";
 
 curl_close($ch);
 

@@ -140,24 +140,25 @@ $lista_exercicios
 ";
 
 // 🟢 ETAPA 6: Chamar a API
-$apiKey = ""; // Troque pela sua chave real
-$url = "https://openrouter.ai/api/v1/chat/completions";
+$apiKey = ''; // Substitua pela sua chave real
 
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey";
+
+// Corpo da requisição no formato da API do Gemini
 $data = [
-    "model" => "gpt-3.5-turbo",
-    "messages" => [
-        ["role" => "user", "content" => $prompt]
-    ]
+    "contents" => [[
+        "role" => "user",
+        "parts" => [["text" => $prompt]]
+    ]]
 ];
 
+
+// Início da requisição cURL
 $ch = curl_init($url);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json",
-    "Authorization: Bearer $apiKey",
-    "HTTP-Referer: seu-site.com", // Trocar para seu domínio real
-    "X-Title: Gerador de Treinos",
-]);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json"
+]);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -168,12 +169,17 @@ if (curl_errno($ch)) {
     curl_close($ch);
     exit;
 }
+echo "<pre>";
+var_dump($response); // Adicione isso para ver a resposta bruta
+echo "</pre>";
 
 curl_close($ch);
 
-// 🟢 ETAPA 7: Interpretar Resposta
+// Interpretar resposta
 $resposta = json_decode($response, true);
-$treino = $resposta['choices'][0]['message']['content'] ?? "<p>Erro: Não foi possível gerar o treino.</p>";
+
+// A resposta da Gemini vem em 'candidates' → 'content' → 'parts'
+$dieta = $resposta['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar a dieta.";
 
 // 🟢 ETAPA 8: Salvar exercícios relacionados no banco
 $linhas = explode("\n", $treino);
