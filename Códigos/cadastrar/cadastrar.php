@@ -36,10 +36,6 @@ if (count($_POST) > 0) {
          VALUES('$email','$senha','$nome','$telefone')";
         $deu_certo = $conexao->query($sql_code) or die($conexao->error);
         if ($deu_certo) {
-            // Exibe o alert de sucesso
-            echo "<script>alert('Cadastro realizado com sucesso!');</script>";
-            unset($_POST);
-            // Redireciona para a página de login após o alert
             echo "<script>window.location.href = '../login/login.php';</script>";
             exit(); // Garante que o script pare aqui após o redirecionamento
         }

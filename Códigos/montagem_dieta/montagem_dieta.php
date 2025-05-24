@@ -34,6 +34,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
         $stmt->bind_param("sissis", $data_inicio, $id_usuario, $objetivo, $situacao, $refeicoes, $caminho_arquivo);
         $stmt->execute();
         $stmt->close();
+        // Inserir evolução com data atual e peso inicial do usuário
+        $peso_stmt = $conexao->prepare("SELECT peso FROM usuario WHERE id_usuario = ?");
+        $peso_stmt->bind_param("i", $id_usuario);
+        $peso_stmt->execute();
+        $peso_stmt->bind_result($peso_inicial);
+        $peso_stmt->fetch();
+        $peso_stmt->close();
+
+        $tempo_dieta_inicial = "Inicio";
+
+        $evolucao_stmt = $conexao->prepare("INSERT INTO evolucao (data_inicio, peso_inicio, id_usuario, objetivo, tempo_dieta) VALUES (?, ?, ?, ?, ?)");
+        $evolucao_stmt->bind_param("sdiss", $data_inicio, $peso_inicial, $id_usuario, $objetivo, $tempo_dieta_inicial);
+        $evolucao_stmt->execute();
+        $evolucao_stmt->close();
+
+
         $conexao->close();
 
         header("Location: ../pagina_principal/index.php");

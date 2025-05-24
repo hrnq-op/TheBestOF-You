@@ -169,9 +169,6 @@ if (curl_errno($ch)) {
     curl_close($ch);
     exit;
 }
-echo "<pre>";
-var_dump($response); // Adicione isso para ver a resposta bruta
-echo "</pre>";
 
 curl_close($ch);
 
@@ -179,8 +176,7 @@ curl_close($ch);
 $resposta = json_decode($response, true);
 
 // A resposta da Gemini vem em 'candidates' → 'content' → 'parts'
-$dieta = $resposta['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar a dieta.";
-
+$treino = $resposta['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar o treino.";
 // 🟢 ETAPA 8: Salvar exercícios relacionados no banco
 $linhas = explode("\n", $treino);
 $exercicios_extraidos = [];
@@ -224,64 +220,64 @@ foreach ($exercicios_extraidos as $nome_exercicio) {
 
 <body>
 
-<header>
-    <div class="logo">
-        <a href="../pagina_principal/index.php">
-            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
-        </a>
-    </div>
-    <div class="site-name">
-        Treino
-    </div>
-    <div class="logo">
-        <a href="../pagina_principal/index.php">
-            <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
-        </a>
-    </div>
-</header>
-
-<div class="qlqr">
-    <h1>Treino Personalizado</h1>
-    <p><strong>Divisão de Treino:</strong> <?= htmlspecialchars($divisao_treino) ?></p>
-    <p><strong>Nível de Treino:</strong> <?= ucfirst(htmlspecialchars($nivel_de_treino)) ?></p>
-    <p><strong>Dias de Treino:</strong> <?= htmlspecialchars($dias_de_treino) ?></p>
-    <p><strong>Ênfase:</strong> <?= htmlspecialchars($enfase) ?></p>
-
-    <h2>Treino sugerido:</h2>
-    <div class="treino"><?= nl2br(htmlspecialchars($treino)) ?></div>
-
-    <div class="botoes">
-        <form method="post" id="formSalvar">
-            <input type="hidden" name="salvar_treino" value="1">
-            <input type="hidden" name="id_treino" value="<?= $id_treino ?>">
-            <input type="hidden" name="treino_conteudo" value="<?= htmlspecialchars($treino, ENT_QUOTES) ?>">
-            <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
-        </form>
-
-        <form method="get" id="formGerar">
-            <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outro treino</button>
-        </form>
-    </div>
-
-    <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
-        <div style="color:white; font-size:24px;">
-            <i class="fas fa-spinner fa-spin"></i> Gerando treino...
+    <header>
+        <div class="logo">
+            <a href="../pagina_principal/index.php">
+                <img src="imagens/Logo.png" alt="Logo"> <!-- Logo esquerda -->
+            </a>
         </div>
-    </div>
+        <div class="site-name">
+            Treino
+        </div>
+        <div class="logo">
+            <a href="../pagina_principal/index.php">
+                <img src="imagens/Logo.png" alt="Logo"> <!-- Logo direita -->
+            </a>
+        </div>
+    </header>
 
-    <script>
-        window.onload = function() {
-            const btnGerarOutra = document.getElementById('btnGerarOutra');
-            const spinner = document.getElementById('spinner');
+    <div class="qlqr">
+        <h1>Treino Personalizado</h1>
+        <p><strong>Divisão de Treino:</strong> <?= htmlspecialchars($divisao_treino) ?></p>
+        <p><strong>Nível de Treino:</strong> <?= ucfirst(htmlspecialchars($nivel_de_treino)) ?></p>
+        <p><strong>Dias de Treino:</strong> <?= htmlspecialchars($dias_de_treino) ?></p>
+        <p><strong>Ênfase:</strong> <?= htmlspecialchars($enfase) ?></p>
 
-            if (btnGerarOutra && spinner) {
-                btnGerarOutra.addEventListener('click', function() {
-                    spinner.style.display = 'flex';
-                });
+        <h2>Treino sugerido:</h2>
+        <div class="treino"><?= nl2br(htmlspecialchars($treino)) ?></div>
+
+        <div class="botoes">
+            <form method="post" id="formSalvar">
+                <input type="hidden" name="salvar_treino" value="1">
+                <input type="hidden" name="id_treino" value="<?= $id_treino ?>">
+                <input type="hidden" name="treino_conteudo" value="<?= htmlspecialchars($treino, ENT_QUOTES) ?>">
+                <button type="submit" class="salvar" id="btnSalvar"><i class="fas fa-arrow-right"></i> Avançar</button>
+            </form>
+
+            <form method="get" id="formGerar">
+                <button type="submit" class="outra" id="btnGerarOutra"><i class="fas fa-sync-alt"></i> Gerar outro treino</button>
+            </form>
+        </div>
+
+        <div id="spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+            <div style="color:white; font-size:24px;">
+                <i class="fas fa-spinner fa-spin"></i> Gerando treino...
+            </div>
+        </div>
+
+        <script>
+            window.onload = function() {
+                const btnGerarOutra = document.getElementById('btnGerarOutra');
+                const spinner = document.getElementById('spinner');
+
+                if (btnGerarOutra && spinner) {
+                    btnGerarOutra.addEventListener('click', function() {
+                        spinner.style.display = 'flex';
+                    });
+                }
             }
-        }
-    </script>
-</div>
+        </script>
+    </div>
 </body>
 
 </html>

@@ -44,8 +44,8 @@ if ($resultado && $resultado->num_rows > 0) {
 
         <nav class="nav-links">
             <a href="../usuario/usuario.php">Dieta</a>
-            <a href="../treino/treino.php">Treino</a>
-            <a href="evolucao.php">Evolução</a>
+            <a href="../selecao_treino/selecao_treino.php">Treino</a>
+            <a href="../evolucao/evolucao.php">Evolução</a>
         </nav>
 
         <div class="auth-container">

@@ -52,3 +52,9 @@ header {
     text-align: center;
     flex-grow: 1;
 }
+
+.button {
+    background-color: #00c853;
+    color: white;
+}
+
