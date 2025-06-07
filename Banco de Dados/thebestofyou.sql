@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 27/04/2025 às 21:46
+-- Tempo de geração: 07/06/2025 às 03:58
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -46,7 +46,7 @@ CREATE TABLE `dieta` (
   `objetivo` varchar(30) NOT NULL,
   `situacao` varchar(1) NOT NULL,
   `refeicoes` int(11) NOT NULL,
-  `dieta` varchar(255) NOT NULL
+  `arquivo_dieta` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -58,10 +58,13 @@ CREATE TABLE `dieta` (
 CREATE TABLE `evolucao` (
   `id_evolucao` int(11) NOT NULL,
   `data_inicio` date NOT NULL,
-  `peso_incio` float NOT NULL,
+  `peso_inicio` float NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `data_fim` date NOT NULL,
-  `peso_fim` float NOT NULL
+  `peso_fim` float NOT NULL,
+  `objetivo` varchar(30) NOT NULL,
+  `tempo_dieta` varchar(30) NOT NULL,
+  `imagem` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -125,7 +128,7 @@ INSERT INTO `exercicio` (`id_exercicio`, `nome`, `link_video_execucao`, `grupo_m
 (41, 'Agachamento com barra', 'https://www.youtube.com/shorts/wzsUfTMPrEg', 'Quadríceps, glúteos, isquiotibiais, core.'),
 (42, 'Agachamento na máquina Smith', 'https://www.youtube.com/shorts/8pjN_4fkxgU', 'Quadríceps, glúteos, isquiotibiais, core.'),
 (43, 'Leg Press', 'https://www.youtube.com/shorts/lHZUF_s3q9c', 'Quadríceps, glúteos, isquiotibiais.'),
-(44, 'Cadeira extensora', 'Cadeira extensora execução correta', ' Quadríceps.'),
+(44, 'Cadeira extensora', 'https://youtu.be/pJZXbaF-MCM?si=k52SlnlEEdOtDvgw', ' Quadríceps.'),
 (45, 'Cadeira flexora', 'https://youtu.be/Zss6E3VU6X0?si=6KgAcS0OPjphog44', ' Isquiotibiais.'),
 (46, 'Afundo com halteres', 'https://www.youtube.com/shorts/w8Ar4bgxizw', 'Quadríceps, glúteos, isquiotibiais.'),
 (47, 'Elevação de quadril (Hip Thrus', 'https://www.youtube.com/shorts/btWqWMBlwlc', ' Glúteos, isquiotibiais'),
@@ -160,8 +163,9 @@ CREATE TABLE `treino` (
   `divisao_treino` varchar(30) NOT NULL,
   `dias_de_treino` int(11) NOT NULL,
   `nivel_de_treino` varchar(30) NOT NULL,
-  `treino` varchar(255) NOT NULL,
-  `enfase` varchar(255) DEFAULT NULL
+  `arquivo_treino` varchar(255) NOT NULL,
+  `enfase` varchar(255) DEFAULT NULL,
+  `situacao` varchar(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -206,7 +210,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$lgwHtFtSnOH2ldqYP/xCyuOflpJo..DrNKKpUo.a8zd/byDNjtkPK', 18, 90, 188, 2094.16, 1.2, 2512.99, 'masculino', 'harris', 'Henrique', '64984355664', 270, 162, 45);
+(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$2Ve/BeCj04Dsx.FvFpwYNO4eusUY4QjoyQK3rFMls6xW6LiGnaapS', 17, 90, 177, 2047.06, 1.725, 3531.18, 'masculino', 'harris', 'Henrique', '64984355664', 360, 180, 90);
 
 --
 -- Índices para tabelas despejadas

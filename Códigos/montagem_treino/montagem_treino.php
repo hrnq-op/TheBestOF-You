@@ -11,24 +11,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_treino'])) {
     $id_treino = $_POST['id_treino'];
     $treino_conteudo = $_POST['treino_conteudo'];
 
-    // Atualizar o treino no banco
-    $stmt = $conexao->prepare("UPDATE treino SET treino = ? WHERE id_treino = ?");
-    $stmt->bind_param("si", $treino_conteudo, $id_treino);
+    // Caminho do arquivo que será salvo no banco
+    $nome_arquivo = "treino_usuario_" . $id_treino . ".txt";
+    $situacao = "A";
+
+    // Atualizar o nome do arquivo no banco
+    $stmt = $conexao->prepare("UPDATE treino SET arquivo_treino = ?, situacao = ? WHERE id_treino = ?");
+    $stmt->bind_param("ssi", $nome_arquivo, $situacao, $id_treino);
     $stmt->execute();
     $stmt->close();
 
     // Criar o arquivo .txt com o treino
-    $caminho_pasta = "../montagem_treino/treinos_salvos/"; // Pasta onde vai salvar
+    $caminho_pasta = "../montagem_treino/treinos_salvos/";
     if (!is_dir($caminho_pasta)) {
-        mkdir($caminho_pasta, 0777, true); // Cria a pasta se não existir
+        mkdir($caminho_pasta, 0777, true);
     }
-    $nome_arquivo = $caminho_pasta . "treino_usuario_" . $id_treino . ".txt";
-    file_put_contents($nome_arquivo, $treino_conteudo);
+    file_put_contents($caminho_pasta . $nome_arquivo, $treino_conteudo);
+
 
     // Redireciona para a página inicial
     header("Location: ../pagina_principal/index.php");
     exit;
 }
+
 
 $id_usuario = $_SESSION['id_usuario'];
 

@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
     $dieta_conteudo = $_POST['dieta_conteudo'] ?? '';
     $objetivo = $_POST['objetivo'] ?? '';
     $refeicoes = $_POST['refeicoes'] ?? 0;
+    $id_dieta = $_POST['id_dieta'] ?? null;
 
     if (!empty($dieta_conteudo) && !empty($objetivo)) {
         // Criar e salvar arquivo .txt
@@ -21,20 +22,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
         $caminho_arquivo = "dietas_salvas/" . $nome_arquivo;
 
         if (!file_exists("dietas_salvas")) {
-            mkdir("dietas_salvas", 0777, true);
+            mkdir("dietas_salvas", 0755, true); // Usando permissão mais segura
         }
 
         file_put_contents($caminho_arquivo, $dieta_conteudo);
 
-        // Inserir nova dieta
-        $data_inicio = date('Y-m-d');
-        $situacao = 'A'; // Ativa
-
-        $stmt = $conexao->prepare("INSERT INTO dieta (data_inicio, id_usuario, objetivo, situacao, refeicoes, dieta) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sissis", $data_inicio, $id_usuario, $objetivo, $situacao, $refeicoes, $caminho_arquivo);
+        // Atualizar dieta existente
+        $stmt = $conexao->prepare("UPDATE dieta SET arquivo_dieta = ? WHERE id_dieta = ?");
+        $stmt->bind_param("si", $caminho_arquivo, $id_dieta);
         $stmt->execute();
         $stmt->close();
-        // Inserir evolução com data atual e peso inicial do usuário
+
+        // Define a data atual que será usada tanto para o fim da dieta anterior quanto para o início da nova
+        $data_atual = date('Y-m-d');
+
+        // ===============================================================================
+        // NOVO CÓDIGO: Finaliza a evolução da dieta anterior
+        // Antes de criar um novo registro de evolução, procuramos por um registro anterior
+        // do mesmo usuário que ainda não tenha uma data_fim definida e a atualizamos.
+        // ===============================================================================
+        $update_evolucao_stmt = $conexao->prepare(
+            "UPDATE evolucao SET data_fim = ? WHERE id_usuario = ? AND data_fim IS NULL"
+        );
+        $update_evolucao_stmt->bind_param("si", $data_atual, $id_usuario);
+        $update_evolucao_stmt->execute();
+        $update_evolucao_stmt->close();
+        // ===============================================================================
+
+
+        // Inserir NOVA evolução com data atual e peso inicial do usuário
         $peso_stmt = $conexao->prepare("SELECT peso FROM usuario WHERE id_usuario = ?");
         $peso_stmt->bind_param("i", $id_usuario);
         $peso_stmt->execute();
@@ -44,11 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['salvar_dieta'])) {
 
         $tempo_dieta_inicial = "Inicio";
 
+        // Insere o novo registro da dieta que se inicia hoje
         $evolucao_stmt = $conexao->prepare("INSERT INTO evolucao (data_inicio, peso_inicio, id_usuario, objetivo, tempo_dieta) VALUES (?, ?, ?, ?, ?)");
-        $evolucao_stmt->bind_param("sdiss", $data_inicio, $peso_inicial, $id_usuario, $objetivo, $tempo_dieta_inicial);
+        // Note que estamos usando $data_atual para a data_inicio
+        $evolucao_stmt->bind_param("sdiss", $data_atual, $peso_inicial, $id_usuario, $objetivo, $tempo_dieta_inicial);
         $evolucao_stmt->execute();
         $evolucao_stmt->close();
-
 
         $conexao->close();
 
@@ -149,9 +166,6 @@ if (curl_errno($ch)) {
     curl_close($ch);
     exit;
 }
-echo "<pre>";
-var_dump($response); // Adicione isso para ver a resposta bruta
-echo "</pre>";
 
 curl_close($ch);
 

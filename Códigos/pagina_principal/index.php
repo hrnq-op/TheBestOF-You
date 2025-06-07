@@ -15,12 +15,13 @@ if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'dieta':
             // Verifica se existe dieta cadastrada
-            $sql_dieta = "SELECT id_dieta FROM dieta 
-                          WHERE id_usuario = ? 
-                          AND dieta IS NOT NULL 
-                          AND dieta != '' 
-                          ORDER BY id_dieta DESC 
-                          LIMIT 1";
+           $sql_dieta = "SELECT id_dieta FROM dieta 
+              WHERE id_usuario = ? 
+              AND arquivo_dieta IS NOT NULL 
+              AND arquivo_dieta != '' 
+              ORDER BY id_dieta DESC 
+              LIMIT 1";
+
             $stmt_dieta = $conexao->prepare($sql_dieta);
             $stmt_dieta->bind_param("i", $id_usuario);
             $stmt_dieta->execute();
@@ -37,8 +38,8 @@ if (isset($_GET['action'])) {
             // Verifica se existe treino cadastrado
             $sql_treino = "SELECT id_treino FROM treino 
                            WHERE id_usuario = ? 
-                           AND treino IS NOT NULL 
-                           AND treino != '' 
+                           AND arquivo_treino IS NOT NULL 
+                           AND arquivo_treino != '' 
                            ORDER BY id_treino DESC 
                            LIMIT 1";
             $stmt_treino = $conexao->prepare($sql_treino);

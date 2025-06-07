@@ -250,12 +250,13 @@
         $sql_check = "SELECT id_dieta FROM dieta WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
         $result = mysqli_query($conexao, $sql_check);
 
-        if (mysqli_num_rows($result) > 0) {
+        if (mysqli_num_rows($result) < 0) {
             $sql_dieta = "UPDATE dieta SET
-                objetivo = '$objetivo',
-                data_inicio = '$data_inicio',
-                situacao = '$situacao'
-                WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'";
+    objetivo = '$objetivo',
+    data_inicio = '$data_inicio'
+    WHERE id_usuario = '" . $_SESSION['id_usuario'] . "'
+    AND situacao = 'A'";
+
 
             if (mysqli_query($conexao, $sql_dieta)) {
                 echo "<p>Objetivo e dados atualizados na tabela dieta com sucesso!</p>";
