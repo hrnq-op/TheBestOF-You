@@ -58,7 +58,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <title>Dietas Anteriores</title>
-    <link rel="stylesheet" href="dietas_anteiores.css"> <style>
+    <link rel="stylesheet" href="dietas_anteriores.css"> <style>
        
     </style>
 </head>

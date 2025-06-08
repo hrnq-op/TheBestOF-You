@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $divisao_escolhida = $_POST['divisao_escolhida'];
 
         // A query agora já deve tratar $enfase corretamente
-        $sql = "INSERT INTO treino (id_usuario, divisao_treino, dias_de_treino, nivel_de_treino, enfase) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO treino (id_usuario, divisao_treino, dias_de_treino, nivel_de_treino, enfase_muscular) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conexao->prepare($sql);
         // Use 's' para o parâmetro enfase (que pode ser NULL)
         $stmt->bind_param("isiss", $id_usuario, $divisao_escolhida, $dias_treino, $nivel_treino, $enfase);
