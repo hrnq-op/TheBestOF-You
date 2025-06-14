@@ -1,1 +1,0 @@
-Não foi possível gerar o treino. Verifique sua chave de API e a resposta do servidor.

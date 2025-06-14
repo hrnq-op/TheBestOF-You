@@ -182,10 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_dieta'])) {
 
     <?php if (!empty($resposta_deepseek)): ?>
         <h2>Nova Dieta Gerada:</h2>
-        <div id="respostaDeepSeek" class="dieta" style="margin-top: 20px;">
+        <div id="respostaDeepSeek" class="dieta">
             <?= nl2br(htmlspecialchars($resposta_deepseek)) ?>
         </div>
-        <form method="post" style="margin-top: 20px;">
+        <form method="post">
                 <button type="submit" name="salvar_dieta" class="salvar">
                     <i class="fas fa-save"></i> Salvar como nova dieta atual
                 </button>
