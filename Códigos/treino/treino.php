@@ -55,7 +55,7 @@ Você é um treinador profissional.
 Aqui está um plano de treino base:
 $treino_texto
 
-Adapte esse treino para uma divisão "$divisao_atual", com $dias_final dias de treino por semana, no nível "$nivel_atual".
+Adapte esse treino com $dias_final dias de treino por semana, no nível "$nivel_atual".
 EOT;
         
         // MELHORIA: Adiciona a ênfase muscular ao prompt, se existir
@@ -67,7 +67,7 @@ EOT;
         $prompt .= "\nGere o novo plano de treino com base em todas essas instruções.";
 
 
-        $apiKey = 'SUA_CHAVE_API_DEEPSEEK'; // Substitua com sua chave
+        $apiKey = ''; // Substitua com sua chave
 
         $dados = [
             "model" => "deepseek-chat",

@@ -124,7 +124,7 @@ A dieta também deve se aproximar das seguintes necessidades diárias de macronu
 - Proteínas: {$prot_necessarias}g
 - Gorduras: {$gord_necessarias}g
 
-Utilize exclusivamente os seguintes alimentos para montar a dieta: " . implode(", ", $alimentos) . ". A dieta deve ser dividida em exatamente {$refeicoes} refeições ao longo do dia.
+Utilize como base os seguintes alimentos para montar a dieta: " . implode(", ", $alimentos) . ". A dieta deve ser dividida em exatamente {$refeicoes} refeições ao longo do dia.
 
 Para cada refeição, descreva de forma clara:
 - Os alimentos incluídos;
@@ -135,29 +135,39 @@ Evite termos vagos como 'porção média' ou 'quantidade moderada'. Sempre espec
 Apresente o conteúdo em formato de texto simples e organizado, apenas com tópicos e espaçamento.
 Ao final, forneça um resumo com o total calórico e de macronutrientes da dieta completa.
 
-Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
+Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação ou seja nada em negrito, etc. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
 
-$apiKey = ''; // Substitua pela sua chave real
+$apiKey = ''; // ⚠️ Lembre-se de proteger sua chave de API!
 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey";
+// 1. URL correta da API DeepSeek
+$url = "https://api.deepseek.com/chat/completions";
 
-// Corpo da requisição no formato da API do Gemini
+// 2. Estrutura de dados correta para a API DeepSeek (padrão OpenAI)
 $data = [
-    "contents" => [[
-        "role" => "user",
-        "parts" => [["text" => $prompt]]
-    ]]
+    'model' => 'deepseek-chat', // Modelo adequado para essa tarefa
+    'messages' => [
+        [
+            'role' => 'user',
+            'content' => $prompt
+        ]
+    ],
+    'temperature' => 0.5, // Temperatura mais baixa para respostas mais diretas e menos criativas
+    'max_tokens' => 4096 // Limite de tokens para a resposta
 ];
 
+// 3. Cabeçalhos corretos, incluindo a autenticação "Bearer"
+$headers = [
+    "Content-Type: application/json",
+    "Authorization: Bearer " . $apiKey
+];
 
 // Início da requisição cURL
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json"
-]);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_TIMEOUT, 120); // Aumentar o tempo de espera para a API processar
 
 $response = curl_exec($ch);
 
@@ -167,13 +177,28 @@ if (curl_errno($ch)) {
     exit;
 }
 
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 // Interpretar resposta
-$resposta = json_decode($response, true);
+$resposta_api = json_decode($response, true);
 
-// A resposta da Gemini vem em 'candidates' → 'content' → 'parts'
-$dieta = $resposta['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar a dieta.";
+// 4. Extrair o texto da resposta no formato correto da API DeepSeek
+if ($http_code == 200 && isset($resposta_api['choices'][0]['message']['content'])) {
+    $dieta = $resposta_api['choices'][0]['message']['content'];
+} else {
+    // Exibe uma mensagem de erro mais detalhada para facilitar a depuração
+    $dieta = "Não foi possível gerar a dieta. Código de status: {$http_code}.";
+    if (isset($resposta_api['error']['message'])) {
+         $dieta .= " Mensagem da API: " . $resposta_api['error']['message'];
+    } else {
+        $dieta .= " Resposta completa: " . htmlspecialchars($response);
+    }
+}
+
+// Agora a variável $dieta contém a resposta da IA e pode ser exibida no seu HTML
+// Exemplo:
+// echo nl2br(htmlspecialchars($dieta));
 
 ?>
 

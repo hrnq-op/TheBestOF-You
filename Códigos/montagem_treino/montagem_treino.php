@@ -141,7 +141,7 @@ REGRAS OBRIGATÓRIAS:
     - Nome do Exercício
     - Séries e Repetições (ajustado para o nível de experiência)
     - O link para o vídeo de execução.
-4.  O output deve ser apenas o plano de treino, de forma clara e organizada por dia.
+4.  O output deve ser apenas o plano de treino, de forma clara e organizada por dia e sem formatação, ou seja nada em negrito, etc.
 
 MODELO DE RESPOSTA ESPERADO:
 
@@ -162,25 +162,38 @@ LISTA DE EXERCÍCIOS DISPONÍVEIS:
 ";
 
 
-// 🟢 ETAPA 6: Chamar a API
-$apiKey = 'SUA_CHAVE_API_AQUI'; // ⚠️ SUBSTITUA PELA SUA CHAVE REAL
+// 🟢 ETAPA 6: Chamar a API do DeepSeek
+$apiKey = ''; // ⚠️ SUA CHAVE DE API - É mais seguro usar variáveis de ambiente!
 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey";
+// URL correta da API DeepSeek para chat
+$url = "https://api.deepseek.com/chat/completions";
 
+// Estrutura de dados correta para a API DeepSeek (padrão OpenAI)
 $data = [
-    "contents" => [[
-        "role" => "user",
-        "parts" => [["text" => $prompt]]
-    ]]
+    'model' => 'deepseek-chat', // ou 'deepseek-reasoner' para tarefas mais complexas
+    'messages' => [
+        [
+            'role' => 'user',
+            'content' => $prompt
+        ]
+    ],
+    'temperature' => 0.7, // Ajusta a criatividade da resposta
+    'max_tokens' => 4096 // Limite máximo de tokens na resposta
 ];
 
+// Monta os cabeçalhos da requisição, incluindo a autorização
+$headers = [
+    "Content-Type: application/json",
+    "Authorization: Bearer " . $apiKey // O formato correto é "Bearer [sua_chave]"
+];
 
 // Início da requisição cURL
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_TIMEOUT, 120); // Aumenta o tempo limite para 120 segundos
 
 $response = curl_exec($ch);
 
@@ -192,9 +205,16 @@ if (curl_errno($ch)) {
 
 curl_close($ch);
 
+// Decodifica a resposta da API
 $resposta_api = json_decode($response, true);
-$treino = $resposta_api['candidates'][0]['content']['parts'][0]['text'] ?? "Não foi possível gerar o treino. Verifique sua chave de API e a resposta do servidor.";
 
+// Extrai o texto da resposta no formato correto da API DeepSeek/OpenAI
+if (isset($resposta_api['choices'][0]['message']['content'])) {
+    $treino = $resposta_api['choices'][0]['message']['content'];
+} else {
+    // Se houver um erro, exibe a resposta da API para depuração
+    $treino = "Não foi possível gerar o treino. Resposta do servidor: \n" . htmlspecialchars(print_r($resposta_api, true));
+}
 // 🟢 ETAPA 8: Salvar exercícios relacionados no banco
 $linhas = explode("\n", $treino);
 $exercicios_extraidos = [];

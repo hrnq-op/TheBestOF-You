@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/06/2025 às 03:58
+-- Tempo de geração: 14/06/2025 às 03:17
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -66,6 +66,14 @@ CREATE TABLE `evolucao` (
   `tempo_dieta` varchar(30) NOT NULL,
   `imagem` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `evolucao`
+--
+
+INSERT INTO `evolucao` (`id_evolucao`, `data_inicio`, `peso_inicio`, `id_usuario`, `data_fim`, `peso_fim`, `objetivo`, `tempo_dieta`, `imagem`) VALUES
+(1, '2025-06-10', 20, 6, '2025-06-10', 120, 'Não definido', '1 mês', 'imagens_evolucao/684837712b174_36168.jpeg'),
+(2, '2025-06-10', 120, 6, '0000-00-00', 0, 'definir', '5 meses', 'imagens_evolucao/68483780bab6f_gordao14.jpg');
 
 -- --------------------------------------------------------
 
@@ -164,9 +172,18 @@ CREATE TABLE `treino` (
   `dias_de_treino` int(11) NOT NULL,
   `nivel_de_treino` varchar(30) NOT NULL,
   `arquivo_treino` varchar(255) NOT NULL,
-  `enfase` varchar(255) DEFAULT NULL,
+  `enfase_muscular` varchar(255) DEFAULT NULL,
   `situacao` varchar(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `treino`
+--
+
+INSERT INTO `treino` (`id_treino`, `id_usuario`, `divisao_treino`, `dias_de_treino`, `nivel_de_treino`, `arquivo_treino`, `enfase_muscular`, `situacao`) VALUES
+(1, 1, 'PPL + Full Body', 4, 'intermediario', 'treino_usuario_1.txt', 'Peito', 'A'),
+(2, 1, 'PPL + Full Body', 5, 'intermediario', 'treino_usuario_1_20250610_123401.txt', 'Peito, Ombro e Perna', 'D'),
+(3, 4, 'PPL + Upper/Lower', 5, 'intermediario', 'treino_usuario_3.txt', NULL, 'A');
 
 -- --------------------------------------------------------
 
@@ -190,6 +207,8 @@ CREATE TABLE `usuario` (
   `id_usuario` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL,
+  `email_verified_at` datetime DEFAULT NULL,
+  `verification_token` varchar(255) DEFAULT NULL,
   `idade` int(3) NOT NULL,
   `peso` float NOT NULL,
   `altura` int(3) NOT NULL,
@@ -209,8 +228,12 @@ CREATE TABLE `usuario` (
 -- Despejando dados para a tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$2Ve/BeCj04Dsx.FvFpwYNO4eusUY4QjoyQK3rFMls6xW6LiGnaapS', 17, 90, 177, 2047.06, 1.725, 3531.18, 'masculino', 'harris', 'Henrique', '64984355664', 360, 180, 90);
+INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `email_verified_at`, `verification_token`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`) VALUES
+(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$2Ve/BeCj04Dsx.FvFpwYNO4eusUY4QjoyQK3rFMls6xW6LiGnaapS', NULL, '02bcc97d640edfd6699434ef4423b799ef973f5ca7b1b0780f1a7eac333b7e9f', 17, 90, 177, 2047.06, 1.725, 3531.18, 'masculino', 'harris', 'Henrique', '64984355664', 360, 180, 90),
+(4, 'jotaindonesia76@gmail.com', '$2y$10$BaOkzQzgCC0nJG1PuzAsr.V4QrR44qvR.mWgB7wMv4cK6SSeQeWgG', '2025-06-10 10:44:24', NULL, 0, 0, 0, 0, 0, 0, '', '', 'Jhonatan Davis', '22988882020', 0, 0, 0),
+(5, 'jhonatandavis64@gmail.com', '$2y$10$ak8CF8H56IQLZz4rKMGaYeqvc3zgTdoMkBoU4IrjplLxVgTEahtCu', '2025-06-10 10:49:38', NULL, 0, 0, 0, 0, 0, 0, '', '', 'jotinha', '13234552123', 0, 0, 0),
+(6, 'kleiberrc@gmail.com', '$2y$10$LnuVw0F8XtQzRhIXHJA/9OHwq8tTHHcHLwhcmgk/QH4KKFB8eFtwW', '2025-06-10 10:46:58', NULL, 0, 0, 0, 0, 0, 0, '', '', 'kleib', '22988882020', 0, 0, 0),
+(7, 'jhonatandavis64@gmail.com', '$2y$10$2Tn.nHeuFzfRJOqpn./c9.jy.85LSGDA5vqf/FrBNtAAc/1FDITxe', NULL, NULL, 0, 0, 0, 0, 0, 0, '', '', 'jotinha', '22988882020', 0, 0, 0);
 
 --
 -- Índices para tabelas despejadas
@@ -284,7 +307,7 @@ ALTER TABLE `dieta`
 -- AUTO_INCREMENT de tabela `evolucao`
 --
 ALTER TABLE `evolucao`
-  MODIFY `id_evolucao` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_evolucao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `exercicio`
@@ -296,7 +319,7 @@ ALTER TABLE `exercicio`
 -- AUTO_INCREMENT de tabela `treino`
 --
 ALTER TABLE `treino`
-  MODIFY `id_treino` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_treino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `treino_exercicio`
@@ -308,7 +331,7 @@ ALTER TABLE `treino_exercicio`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

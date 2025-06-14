@@ -38,16 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_alteracao'])) 
     if (!empty($alteracao_usuario) && !empty($dieta_texto) && !empty($objetivo_atual) && !empty($refeicoes_final)) {
         $prompt = <<<EOT
 Você é um nutricionista profissional.
-Aqui está uma dieta base:
+A partir dessa dieta faça as alterações desejadas:
 $dieta_texto
 
-Adapte essa dieta para o objetivo "$objetivo_atual", com $refeicoes_final refeições por dia, e faça as alterações a seguir:
+A dieta tem que ter $refeicoes_final refeições por dia, e faça as alterações a seguir:
 $alteracao_usuario
 
-Gere a nova dieta com base nas instruções acima.
+Gere a nova dieta com base nas instruções acima. (envie a dieta sem formatação, ou seja nada em negrito, etc.)
 EOT;
 
-        $apiKey = 'SUA_CHAVE_API_DEEPSEEK'; // Substitua com sua chave
+        $apiKey = ''; // Substitua com sua chave
 
         $dados = [
             "model" => "deepseek-chat",
