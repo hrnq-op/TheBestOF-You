@@ -135,7 +135,7 @@ Evite termos vagos como 'porção média' ou 'quantidade moderada'. Sempre espec
 Apresente o conteúdo em formato de texto simples e organizado, apenas com tópicos e espaçamento.
 Ao final, forneça um resumo com o total calórico e de macronutrientes da dieta completa.
 
-Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação ou seja nada em negrito, etc. Use apenas tópicos e espaçamento adequado para facilitar a leitura.";
+Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação ou seja nada em negrito, etc.";
 
 $apiKey = ''; // ⚠️ Lembre-se de proteger sua chave de API!
 
