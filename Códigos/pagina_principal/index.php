@@ -1,22 +1,23 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado na sessão PHP
+// --- INÍCIO: Bloco de Segurança (do Script 1) ---
+
+// 1. Verifica se o usuário está logado na sessão PHP
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: ../login/login.php");
     exit();
 }
 
 include('../conexao.php'); // O caminho para conexao.php é relativo ao index.php
-
-// --- NOVA VERIFICAÇÃO DE SESSÃO ATIVA NO BANCO DE DADOS ---
 $id_usuario = $_SESSION['id_usuario'];
-$session_id_atual = session_id(); // Obtém o ID da SESSÃO PHP atual
+
+// 2. Verificação de Sessão Ativa no Banco de Dados (Segurança Avançada)
+$session_id_atual = session_id(); 
 
 $stmt_check_active_session = $conexao->prepare("SELECT COUNT(*) FROM sessoes_ativas WHERE id_usuario = ? AND session_id = ?");
 if (!$stmt_check_active_session) {
     error_log("Erro na preparação da consulta de sessão: " . $conexao->error);
-    // Pode redirecionar ou mostrar um erro para o usuário
     session_destroy();
     header("Location: ../login/login.php?erro_db_sessao=true");
     exit();
@@ -28,25 +29,62 @@ $stmt_check_active_session->fetch();
 $stmt_check_active_session->close();
 
 if ($session_count == 0) {
-    // A sessão não é mais ativa no DB (foi deslogada remotamente ou expirou/não registrada)
-    session_destroy(); // Destroi a sessão atual no servidor
-    // Redireciona com um parâmetro para o login.php saber o motivo
+    session_destroy(); 
     header("Location: ../login/login.php?sessao_invalida=true"); 
-    exit(); // É CRUCIAL usar exit() após o redirecionamento
+    exit();
 }
-// --- FIM DA NOVA VERIFICAÇÃO ---
+// --- FIM: Bloco de Segurança ---
 
-// ... (Restante do seu código index.php, incluindo a busca de nome/foto e o HTML) ...
 
-// Busca o nome do usuário e, se houver, a foto de perfil
+// --- INÍCIO: Lógica de Roteamento (do Script 2) ---
+// Verifica se uma ação foi clicada antes de carregar o restante da página
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'dieta':
+            // Verifica se existe dieta cadastrada
+            $sql_dieta = "SELECT id_dieta FROM dieta WHERE id_usuario = ? AND arquivo_dieta IS NOT NULL AND arquivo_dieta != '' ORDER BY id_dieta DESC LIMIT 1";
+            $stmt_dieta = $conexao->prepare($sql_dieta);
+            $stmt_dieta->bind_param("i", $id_usuario);
+            $stmt_dieta->execute();
+            $resultado_dieta = $stmt_dieta->get_result();
+
+            if ($resultado_dieta && $resultado_dieta->num_rows > 0) {
+                header("Location: ../dieta/dieta.php");
+            } else {
+                // Redireciona para a página de criação se não houver dieta
+                header("Location: ../usuario/usuario.php"); 
+            }
+            exit();
+
+        case 'treino':
+            // Verifica se existe treino cadastrado
+            $sql_treino = "SELECT id_treino FROM treino WHERE id_usuario = ? AND arquivo_treino IS NOT NULL AND arquivo_treino != '' ORDER BY id_treino DESC LIMIT 1";
+            $stmt_treino = $conexao->prepare($sql_treino);
+            $stmt_treino->bind_param("i", $id_usuario);
+            $stmt_treino->execute();
+            $resultado_treino = $stmt_treino->get_result();
+
+            if ($resultado_treino && $resultado_treino->num_rows > 0) {
+                header("Location: ../treino/treino.php");
+            } else {
+                header("Location: ../selecao_treino/selecao_treino.php");
+            }
+            exit();
+    }
+}
+// --- FIM: Lógica de Roteamento ---
+
+
+// --- INÍCIO: Busca de Dados para Exibição (Mescla dos Scripts 1 e 2) ---
+// Busca o nome e a foto do usuário em uma única consulta
 $sql_usuario = "SELECT nome, foto_perfil FROM usuario WHERE id_usuario = ? LIMIT 1";
 $stmt_usuario = $conexao->prepare($sql_usuario);
 $stmt_usuario->bind_param("i", $id_usuario);
 $stmt_usuario->execute();
 $resultado_usuario = $stmt_usuario->get_result();
 
-$foto_perfil_exibicao_index = '';
 $nome_usuario = "Usuário";
+$foto_perfil_exibicao_index = '../perfil/uploads_perfil/foto_padrao.png'; // Caminho padrão
 
 if ($resultado_usuario && $resultado_usuario->num_rows > 0) {
     $usuario = $resultado_usuario->fetch_assoc();
@@ -55,29 +93,25 @@ if ($resultado_usuario && $resultado_usuario->num_rows > 0) {
 
     if ($foto_perfil_salva_db) {
         $foto_perfil_exibicao_index = '../perfil/' . htmlspecialchars($foto_perfil_salva_db);
-    } else {
-        $foto_perfil_exibicao_index = '../perfil/uploads_perfil/foto_padrao.png'; 
     }
-} else {
-    $foto_perfil_exibicao_index = '../perfil/uploads_perfil/foto_padrao.png';
 }
 
-// Verifica se o arquivo da foto existe fisicamente no servidor para evitar quebras visuais
-$base_path = realpath(__DIR__ . '/..'); // Caminho absoluto para a pasta pai (seu_projeto/)
-// Constrói o caminho físico para file_exists, garantindo que seja absoluto ou relativo à raiz do projeto
-$caminho_fisico_foto_server = str_replace('../', $base_path . '/', $foto_perfil_exibicao_index); // Ajuste cuidadoso aqui
+// Verifica se o arquivo da foto existe fisicamente no servidor
+$base_path = realpath(__DIR__ . '/..');
+$caminho_fisico_foto_server = str_replace('../', $base_path . '/', $foto_perfil_exibicao_index);
 
 $foto_perfil_existe = false;
-if ($foto_perfil_exibicao_index && file_exists($caminho_fisico_foto_server)) {
+if (file_exists($caminho_fisico_foto_server)) {
     $foto_perfil_existe = true;
-} else if (strpos($foto_perfil_exibicao_index, 'foto_padrao.png') !== false) {
-    // Se for a foto padrão, verifica se o arquivo padrão existe
+} else {
+    // Se o arquivo do usuário não existir, volta para o padrão e verifica novamente
+    $foto_perfil_exibicao_index = '../perfil/uploads_perfil/foto_padrao.png';
     if (file_exists($base_path . '/perfil/uploads_perfil/foto_padrao.png')) {
         $foto_perfil_existe = true;
     }
 }
+// --- FIM: Busca de Dados ---
 
-// O restante do HTML do index.php permanece o mesmo
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -99,8 +133,8 @@ if ($foto_perfil_exibicao_index && file_exists($caminho_fisico_foto_server)) {
         <div class="site-name">TheBestOF-You</div>
 
         <nav class="nav-links">
-            <a href="../usuario/usuario.php?action=dieta">Dieta</a>
-            <a href="../selecao_treino/selecao_treino.php?action=treino">Treino</a>
+            <a href="?action=dieta">Dieta</a>
+            <a href="?action=treino">Treino</a>
             <a href="../evolucao/evolucao.php">Evolução</a>
         </nav>
 
