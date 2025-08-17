@@ -1,141 +1,258 @@
+/*
+ * Arquivo: cadastrar.css
+ * Descrição: Estilos para a página de cadastro com base no design da página de login.
+ * Data: 18 de Junho de 2025
+ */
+
+/* Variáveis CSS para a paleta de cores para fácil manutenção */
+:root {
+    --color-dark-gray: #333;
+    --color-medium-gray: #555;
+    --color-primary-green: #60D679;
+    --color-primary-green-dark: #4CAF50;
+    --color-white: #ffffff;
+    --color-error-text: #721c24;
+    --color-error-bg: rgba(248, 215, 218, 0.8);
+}
+
+/* Reset básico e fonte */
 * {
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
 }
 
+/* Estilos para o corpo da página - Imagem de fundo consistente com o login */
 body {
-    background-image: url("imagens/fundo.png");
-    background-size: cover;           /* cobre toda a tela */
-    background-position: center;      /* centraliza a imagem */
-    background-repeat: no-repeat;     /* não repete */
-    height: 100vh;                    /* altura total da tela */
+    background-image: url('imagens/background-login.jpg');/* USANDO A MESMA IMAGEM DO LOGIN */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0;
     padding: 0;
+    overflow: hidden; /* Evita barras de rolagem desnecessárias */
 }
 
-/* Caixa mais justa com formulário centralizado */
+/* Contêiner do formulário com estilo de vidro fosco */
 .form-container {
-    background-color: #ffffff;
-    padding: 20px 25px; /* Reduzido */
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     width: 100%;
-    max-width: 320px; /* Mais estreita */
-    box-sizing: border-box;
+    max-width: 420px; /* Largura consistente com o login */
+    position: relative; /* Essencial para posicionar o botão de voltar */
+    animation: fadeIn 1s ease-out forwards;
 }
 
-/* Garantir centralização interna do form */
-form {
+/* Contêiner para ícones e inputs */
+.input-container {
+    position: relative; /* Mantido para posicionamento absoluto dos ícones */
+    display: flex;
+    align-items: center;
     width: 100%;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c2c54;
-    text-transform: uppercase;
-    font-size: 20px;
+/* Ícone de cadeado dentro dos inputs (na esquerda) */
+.input-container i.fa-lock { /* Especifica o ícone de cadeado para manter à esquerda */
+    position: absolute;
+    left: 15px;
+    color: var(--color-medium-gray);
+    font-size: 1.1rem;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #2c2c54;
+/* Ícone de usuário e envelope (se houver, para manter à esquerda) */
+.input-container i.fa-user,
+.input-container i.fa-envelope,
+.input-container i.fa-phone {
+    position: absolute;
+    left: 15px;
+    color: var(--color-medium-gray);
+    font-size: 1.1rem;
 }
 
-input {
+
+/* Ajuste no padding do input para dar espaço ao ícone da esquerda e da direita */
+.input-container input {
     width: 100%;
-    padding: 8px 10px 8px 35px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #ffffff;
-    color: #2c2c54;
-    box-sizing: border-box;
+    padding: 12px 45px 12px 45px; /* Top/Right/Bottom/Left. O right de 45px é para o olho. */
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 2px solid var(--color-medium-gray);
+    background-color: transparent;
+    color: var(--color-dark-gray);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border-radius: 0; /* Remove cantos arredondados */
+}
+
+input:focus {
+    outline: none;
+    border-bottom-color: var(--color-primary-green);
 }
 
 input::placeholder {
-    color: #888;
+    color: var(--color-medium-gray);
+    opacity: 0.8;
 }
 
+
+/* Foco dos inputs (ALTERADO) */
+.input-container input:focus {
+    border-bottom-color: var(--color-primary-green); /* Muda a cor da linha ao focar */
+    box-shadow: none; /* Remove a sombra */
+    background-color: transparent; /* Garante que o fundo continue transparente */
+}
+
+/* Animação de fade-in para o formulário */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    color: var(--color-dark-gray);
+    font-size: 28px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+
+/* --- ESTILOS DO SPINNER DE CARREGAMENTO --- */
+
+/* Contêiner que cobre o formulário */
+.spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semitransparente */
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    border-radius: 20px; /* Mesma borda do formulário */
+    backdrop-filter: blur(5px); /* Efeito de desfoque adicional */
+}
+
+/* O Spinner Verde */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(76, 175, 80, 0.3); /* Verde claro para a base do círculo */
+    border-top-color: #4CAF50; /* Verde escuro para a parte que gira */
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+/* Animação da rotação */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Botão de cadastro com gradiente */
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #00c853;
-    color: #ffffff;
+    padding: 12px;
+    background: linear-gradient(to right, var(--color-primary-green), var(--color-primary-green-dark));
+    color: var(--color-white);
     font-weight: bold;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 15px;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background-color: #00b44b;
+    background: linear-gradient(to right, var(--color-primary-green-dark), var(--color-primary-green));
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
 }
 
-a {
-    color: #00c853;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-p {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.error {
-    color: #ff6b6b;
-    background-color: #ffe6e6;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.success {
-    color: #00c853;
-    background-color: #e8f5e9;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
+/* Links para login */
 .login-link {
     text-align: center;
+    margin-top: 15px;
+    color: var(--color-medium-gray);
 }
 
 .login-link a {
-    color: #00c853;
+    color: var(--color-primary-green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
+.login-link a:hover {
+    color: var(--color-primary-green-dark);
+    text-decoration: underline;
+}
+
+/* Botão de voltar consistente com a página de login */
 .botao-voltar {
     position: absolute;
     top: 20px;
-    left: 20px;
+    left: 25px;
     background-color: transparent;
     border: none;
-    color: #00c853;
-    font-size: 2rem;
+    color: var(--color-dark-gray);
+    font-size: 2.2rem;
     cursor: pointer;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease, color 0.3s ease;
+    z-index: 10;
 }
 
 .botao-voltar:hover {
-    transform: scale(1.15);
+    transform: scale(1.2);
+    color: var(--color-primary-green);
+}
+
+/* Mensagens de erro e sucesso */
+.error, .success {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.error {
+    color: var(--color-error-text);
+    background-color: var(--color-error-bg);
+}
+
+.success {
+    background-color: rgba(96, 214, 121, 0.2);
+    color: #155724;
+}
+
+/* Estilo para o ícone de alternância de senha (o "olhinho") */
+.password-toggle {
+    position: absolute;
+    right: 15px; /* Posiciona o ícone 15px da borda direita do input-container */
+    cursor: pointer;
+    color: var(--color-medium-gray);
+    font-size: 1.1rem;
+}
+
+.password-toggle:hover {
+    color: var(--color-primary-green);
 }

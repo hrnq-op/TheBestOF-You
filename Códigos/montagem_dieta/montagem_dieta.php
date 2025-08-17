@@ -134,8 +134,8 @@ Para cada refeição, descreva de forma clara:
 Evite termos vagos como 'porção média' ou 'quantidade moderada'. Sempre especifique as quantidades em gramas (g).
 Apresente o conteúdo em formato de texto simples e organizado, apenas com tópicos e espaçamento.
 Ao final, forneça um resumo com o total calórico e de macronutrientes da dieta completa.
-
-Apresente o conteúdo em formato de texto simples e organizado, sem tabelas ou qualquer tipo de formatação ou seja nada em negrito, etc.";
+s
+Apresente o conteúdo em html, utlizando tags";
 
 $apiKey = ''; // ⚠️ Lembre-se de proteger sua chave de API!
 

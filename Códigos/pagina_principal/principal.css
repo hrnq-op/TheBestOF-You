@@ -1,129 +1,79 @@
 /* Reset básico */
+/* Aplicações de utilitários do Tailwind já cobrem grande parte desses resets */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-/* Configurações gerais */
+/* Configurações personalizadas para as variáveis de cores do tema */
+/* Estas variáveis são usadas no tailwind.config.js para mapear para classes do Tailwind */
+:root {
+    --color-primary-green: #00c853;       /* Verde vibrante para destaque */
+    --color-primary-green-dark: #00b44b;  /* Verde mais escuro para hover/estados ativos */
+    --color-light-bg: #f5f8fb;            /* Fundo principal claro */
+    --color-dark-gray: #333;              /* Cor principal para textos e elementos escuros */
+    --color-medium-gray: #555;            /* Cor para parágrafos e textos secundários */
+    --color-light-gray-text: #777;        /* Cor para rodapé e textos muito leves */
+    --color-white: #ffffff;               /* Cor branca para fundos e textos inversos */
+}
+
+/* Define o comportamento de rolagem suave para links de âncora */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Estilos base para o corpo do documento */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f5f8fb;
-    color: #333;
+    font-family: 'Inter', sans-serif; /* Aplica a fonte Inter */
+    background-color: var(--color-light-bg); /* Fundo claro */
+    color: var(--color-dark-gray); /* Cor de texto padrão */
+    -webkit-font-smoothing: antialiased; /* Suavização de fonte para WebKit */
+    -moz-osx-font-smoothing: grayscale;  /* Suavização de fonte para Firefox/macOS */
 }
 
-/* Header */
-header {
-    background-color: white;
-    padding: 2px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* Classe personalizada para sombra de botão, adiciona um efeito de profundidade */
+.btn-shadow {
+    box-shadow: 0 4px 10px rgba(0, 200, 83, 0.3); /* Sombra suave com cor verde */
 }
 
-.logo img {
-    height: 120px;
-    margin-left: 20px;
+/* Keyframes para animações CSS */
+
+/* Animação para elementos aparecerem de baixo para cima */
+@keyframes fadeInUpt {
+    from {
+        opacity: 0;           /* Começa invisível */
+        transform: translateY(20px); /* Move 20px para baixo */
+    }
+    to {
+        opacity: 1;           /* Termina totalmente visível */
+        transform: translateY(0);    /* Volta à posição original */
+    }
 }
 
-.site-name {
-    font-size: 1.8rem;
-    font-weight: 700;
+/* Animação para elementos aparecerem da direita para a esquerda */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;            /* Começa invisível */
+        transform: translateX(20px); /* Move 20px para a direita */
+    }
+    to {
+        opacity: 1;            /* Termina totalmente opaco */
+        transform: translateX(0);     /* Termina na posição original */
+    }
 }
 
-.nav-links a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s;
+/* Classes Tailwind para aplicar as animações. Elas precisam de 'opacity: 0' inicial
+   para que o estado 'from' da animação seja visível. */
+.animate-fade-in-up {
+    animation: fadeInUpt 0.8s ease-out forwards;
+    opacity: 0; /* Garante que o elemento comece invisível */
 }
 
-.nav-links a:hover {
-    color: #00c853;
+.animate-fade-in-right {
+    animation: fadeInRight 0.8s ease-out forwards;
+    opacity: 0; /* Garante que o elemento comece invisível */
 }
 
-.auth-container {
-    margin-left: 20px;
-}
-
-.auth-btn {
-    background-color: #00c853;
-    color: white;
-    padding: 8px 20px;
-    border-radius: 4px; /* << Quadrado */
-    text-decoration: none;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-    margin-right: 50px;
-}
-
-.auth-btn:hover {
-    background-color: #00b44b;
-}
-
-.user-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Seção Introdução */
-.intro {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* << Ajustado */
-    padding: 20px 100px; /* << Mais parecido com o site */
-    gap: 10px;
-}
-
-.intro-text {
-    max-width: 500px; /* << Para ficar mais parecido */
-}
-
-.intro-text h1 {
-    font-size: 2.2rem;
-    margin-bottom: 50px;
-    color: #333;
-    font-weight: 700px;
-}
-
-.intro-text p {
-    font-size: 1.125rem;
-    color: #555;
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.btn-container-bottom {
-    margin-top: 50px;
-}
-
-.btn-comecar {
-    background-color: #00c853;
-    color: white;
-    padding: 14px 32px;
-    border-radius: 4px; /* << Quadrado */
-    font-size: 1rem;
-    text-decoration: none;
-    transition: background 0.3s;
-}
-
-.btn-comecar:hover {
-    background-color: #00b44b;
-}
-
-.intro-image img {
-    width: 90%;
-    height: auto;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 30px 20px;
-    font-size: 0.9rem;
-    color: #777;
-    margin-top: 50px;
-}
+/* Classes para atrasar o início das animações, criando um efeito escalonado */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }

@@ -44,10 +44,10 @@ $dieta_texto
 A dieta tem que ter $refeicoes_final refeições por dia, e faça as alterações a seguir:
 $alteracao_usuario
 
-Gere a nova dieta com base nas instruções acima. (envie a dieta sem formatação, ou seja nada em negrito, etc.)
+Gere a nova dieta com base nas instruções acima. (Apresente o conteúdo em html, utlizando tags)
 EOT;
 
-        $apiKey = ''; // Substitua com sua chave
+        $apiKey = 'sk-10bd79c8c74d4946bf0d75c7f2ecfdf8'; // Substitua com sua chave
 
         $dados = [
             "model" => "deepseek-chat",
@@ -151,6 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_dieta'])) {
     </div>
 </header>
 
+
+<div id="loader-wrapper">
+    <div class="loader"></div>
+</div>
+
 <div class="qlqr">
     <h1>Plano Atual:</h1>
 
@@ -192,6 +197,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_dieta'])) {
             </form>
     <?php endif; ?>
 </div>
+
+<script>
+        window.onload = function() {
+            const loader = document.getElementById('loader-wrapper');
+            loader.style.display = 'none';
+        };
+    </script>
 
 </body>
 </html>

@@ -163,7 +163,7 @@ LISTA DE EXERCÍCIOS DISPONÍVEIS:
 
 
 // 🟢 ETAPA 6: Chamar a API do DeepSeek
-$apiKey = ''; // ⚠️ SUA CHAVE DE API - É mais seguro usar variáveis de ambiente!
+$apiKey = 'sk-10bd79c8c74d4946bf0d75c7f2ecfdf8'; // ⚠️ SUA CHAVE DE API - É mais seguro usar variáveis de ambiente!
 
 // URL correta da API DeepSeek para chat
 $url = "https://api.deepseek.com/chat/completions";

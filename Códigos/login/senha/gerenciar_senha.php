@@ -1,20 +1,16 @@
 <?php
-// Arquivo: gerenciar_senha.php (Versão Unificada com Redirecionamento)
-
 // --- CONFIGURAÇÃO E INICIALIZAÇÃO ---
 session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 require '../email/vendor/autoload.php';
 include('../../conexao.php');
 
 $modo = 'solicitar';
 $mensagem_feedback = '';
+$tipo_mensagem = 'success'; // 'success' ou 'error'
 $token_valido = false;
 $token_from_url = '';
 
@@ -43,10 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['token'], $_POST['senha
     
     if (!$user || $expirado) {
         $modo = 'mensagem';
+        $tipo_mensagem = 'error';
         $mensagem_feedback = 'Este link de redefinição é inválido ou expirou. Por favor, solicite um novo.';
     } elseif ($_POST['senha'] !== $_POST['confirma_senha']) {
         $token_from_url = $token;
         $token_valido = true;
+        $tipo_mensagem = 'error';
         $mensagem_feedback = 'As senhas não coincidem. Tente novamente.';
     } else {
         $nova_senha = $_POST['senha'];
@@ -59,9 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['token'], $_POST['senha
         
         if ($stmt_update->execute()) {
             $modo = 'mensagem';
+            $tipo_mensagem = 'success';
             $mensagem_feedback = 'Sua senha foi redefinida com sucesso! Você já pode <a href="../login.php">fazer login</a>.';
         } else {
             $modo = 'mensagem';
+            $tipo_mensagem = 'error';
             $mensagem_feedback = 'Ocorreu um erro ao atualizar sua senha. Por favor, tente novamente.';
         }
     }
@@ -75,10 +75,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
-    // Verifica se o e-mail foi encontrado no banco de dados
     if ($user) {
-        // --- EMAIL ENCONTRADO ---
-        // A lógica para gerar o token e enviar o e-mail continua a mesma
         $token = bin2hex(random_bytes(32));
         $token_hash = hash('sha256', $token);
 
@@ -108,25 +105,25 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
             $mail->addAddress($email);
             $mail->isHTML(true);
             $mail->Subject = 'Redefinição de Senha';
-            $reset_link = "http://localhost/TheBestOF-You/Códigos/login/senha/gerenciar_senha.php?token=" . $token; // Link para este mesmo arquivo
+            $reset_link = "http://localhost/TheBestOF-You/Códigos/login/senha/gerenciar_senha.php?token=" . $token;
             $mail->Body    = "Olá,<br><br>Recebemos uma solicitação para redefinir sua senha. Clique no botão abaixo para criar uma nova senha:<br><br>";
             $mail->Body   .= "<a href='$reset_link' style='background-color: #00c853; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;'>Redefinir Senha Agora</a><br><br>";
             $mail->Body   .= "Se você não solicitou isso, por favor, ignore este e-mail.<br>";
             $mail->AltBody = "Para redefinir sua senha, copie e cole este link no seu navegador: " . $reset_link;
             $mail->send();
             
-            $mensagem_feedback = 'E-mail de recuperação enviado com sucesso! Verifique sua caixa de entrada e pasta de spam.';
+            $tipo_mensagem = 'success';
+            $mensagem_feedback = 'E-mail de recuperação enviado! Verifique sua caixa de entrada e pasta de spam.';
 
         } catch (Exception $e) {
+            $tipo_mensagem = 'error';
             $mensagem_feedback = "A mensagem não pôde ser enviada. Erro do Mailer: {$mail->ErrorInfo}";
         }
         $modo = 'mensagem';
 
     } else {
-        // --- ALTERAÇÃO APLICADA AQUI ---
-        // Se o e-mail NÃO for encontrado, redireciona para a página de cadastro.
         header("Location: ../../cadastrar/cadastrar.php");
-        exit(); // Encerra o script para garantir que o redirecionamento ocorra.
+        exit();
     }
 }
 // 3. Validar o TOKEN da URL (via GET)
@@ -142,6 +139,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['token'])) {
 
     if (!$user || $user['reset_token_expires_at'] === NULL) {
         $modo = 'mensagem';
+        $tipo_mensagem = 'error';
         $mensagem_feedback = 'Este link de redefinição de senha é inválido.';
     } else {
         $fuso_horario_sp = new DateTimeZone('America/Sao_Paulo');
@@ -150,6 +148,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['token'])) {
 
         if ($agora_sp > $data_expiracao_utc) {
             $modo = 'mensagem';
+            $tipo_mensagem = 'error';
             $mensagem_feedback = 'Este link de redefinição de senha expirou. Por favor, <a href="gerenciar_senha.php">solicite um novo</a>.';
         } else {
             $modo = 'redefinir';
@@ -164,62 +163,88 @@ elseif ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['token'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Senha</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
-        .container { background: white; padding: 2rem 3rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 420px; }
-        h1 { margin-top: 0; color: #333; }
-        .form-group { margin-bottom: 1.5rem; text-align: left; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="email"], input[type="password"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #00c853; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.2s; }
-        button:hover { background-color: #00c853; }
-        .feedback-message { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 1rem; border-radius: 5px; margin-top: 1rem; }
-        .error-message { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 5px; margin-top: 1rem; }
-        .error-message a, .feedback-message a { color: inherit; font-weight: bold; }
-    </style>
+    <!-- Links para Fontes e Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link para o CSS externo -->
+    <link rel="stylesheet" href="gerenciar_senha.css?v=2">
 </head>
 <body>
 
-<div class="container">
+<div class="form-container">
+    <!-- HTML do Spinner -->
+    <div class="spinner-overlay" id="spinner-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <a href="../login.php" class="botao-voltar" title="Voltar para o Login">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
     <?php // --- LÓGICA DE EXIBIÇÃO --- ?>
 
     <?php if ($modo === 'solicitar'): ?>
         <h1>Recuperar Senha</h1>
-        <p>Digite seu e-mail para receber um link de redefinição de senha.</p>
-        <form action="gerenciar_senha.php" method="POST">
-            <div class="form-group">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
+        <p>Digite seu e-mail para receber um link de redefinição.</p>
+        <!-- ID adicionado ao formulário para o JavaScript -->
+        <form action="gerenciar_senha.php" method="POST" id="solicitar-form">
+            <div class="input-container">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" required placeholder="seuemail@exemplo.com">
             </div>
-            <button type="submit">Enviar Link de Recuperação</button>
+            <button type="submit">Enviar Link</button>
         </form>
 
     <?php elseif ($modo === 'redefinir' && $token_valido): ?>
-        <h1>Redefinir a sua Senha</h1>
+        <h1>Crie uma Nova Senha</h1>
         <?php if (!empty($mensagem_feedback)): ?>
-            <div class="error-message"><?php echo $mensagem_feedback; ?></div>
+            <div class="feedback-message <?php echo $tipo_mensagem; ?>">
+                <p><?php echo $mensagem_feedback; ?></p>
+            </div>
         <?php endif; ?>
         <form action="gerenciar_senha.php" method="POST">
             <input type="hidden" name="token" value="<?php echo htmlspecialchars($token_from_url); ?>">
-            <div class="form-group">
-                <label for="senha">Nova Senha:</label>
-                <input type="password" id="senha" name="senha" required placeholder="Digite a nova senha">
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="senha" required placeholder="Digite a nova senha">
             </div>
-            <div class="form-group">
-                <label for="confirma_senha">Confirmar Nova Senha:</label>
-                <input type="password" id="confirma_senha" name="confirma_senha" required placeholder="Confirme a nova senha">
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="confirma_senha" required placeholder="Confirme a nova senha">
             </div>
             <button type="submit">Salvar Nova Senha</button>
         </form>
 
     <?php elseif ($modo === 'mensagem'): ?>
         <h1>Aviso</h1>
-        <div class="feedback-message">
+        <div class="feedback-message <?php echo $tipo_mensagem; ?>">
             <p><?php echo $mensagem_feedback; ?></p>
         </div>
     <?php endif; ?>
 
 </div>
+
+<!-- JavaScript para controlar o Spinner -->
+<script>
+    const solicitarForm = document.getElementById('solicitar-form');
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+
+    // Adiciona o listener apenas se o formulário de solicitação existir na página
+    if (solicitarForm) {
+        solicitarForm.addEventListener('submit', function(event) {
+            const emailInput = solicitarForm.querySelector('input[name="email"]');
+            
+            // Valida se o email não está vazio para exibir o spinner
+            if (emailInput.value.trim() !== '') {
+                if(spinnerOverlay) {
+                   spinnerOverlay.style.display = 'flex';
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

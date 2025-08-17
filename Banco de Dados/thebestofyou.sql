@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 16/06/2025 às 01:26
+-- Tempo de geração: 17/08/2025 às 19:29
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -33,18 +33,6 @@ CREATE TABLE `alimentos` (
   `id_dieta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `alimentos`
---
-
-INSERT INTO `alimentos` (`id_alimentos`, `nome`, `id_dieta`) VALUES
-(1, 'frango', 2),
-(2, 'arroz', 2),
-(3, 'feijão', 2),
-(4, 'ovo', 2),
-(5, 'alface', 2),
-(6, 'pasta de amendoim', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -60,14 +48,6 @@ CREATE TABLE `dieta` (
   `refeicoes` int(11) NOT NULL,
   `arquivo_dieta` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `dieta`
---
-
-INSERT INTO `dieta` (`id_dieta`, `data_inicio`, `id_usuario`, `objetivo`, `situacao`, `refeicoes`, `arquivo_dieta`) VALUES
-(1, '2025-06-14', 9, 'cutting', 'A', 0, ''),
-(2, '2025-06-15', 18, 'cutting', 'A', 4, '');
 
 -- --------------------------------------------------------
 
@@ -86,14 +66,6 @@ CREATE TABLE `evolucao` (
   `tempo_dieta` varchar(30) NOT NULL,
   `imagem` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `evolucao`
---
-
-INSERT INTO `evolucao` (`id_evolucao`, `data_inicio`, `peso_inicio`, `id_usuario`, `data_fim`, `peso_fim`, `objetivo`, `tempo_dieta`, `imagem`) VALUES
-(1, '2025-06-10', 20, 6, '2025-06-10', 120, 'Não definido', '1 mês', 'imagens_evolucao/684837712b174_36168.jpeg'),
-(2, '2025-06-10', 120, 6, '0000-00-00', 0, 'definir', '5 meses', 'imagens_evolucao/68483780bab6f_gordao14.jpg');
 
 -- --------------------------------------------------------
 
@@ -182,6 +154,21 @@ INSERT INTO `exercicio` (`id_exercicio`, `nome`, `link_video_execucao`, `grupo_m
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `sessoes_ativas`
+--
+
+CREATE TABLE `sessoes_ativas` (
+  `id_sessao` int(11) NOT NULL,
+  `session_id` varchar(255) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `user_agent` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `login_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `treino`
 --
 
@@ -195,16 +182,6 @@ CREATE TABLE `treino` (
   `enfase_muscular` varchar(255) DEFAULT NULL,
   `situacao` varchar(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `treino`
---
-
-INSERT INTO `treino` (`id_treino`, `id_usuario`, `divisao_treino`, `dias_de_treino`, `nivel_de_treino`, `arquivo_treino`, `enfase_muscular`, `situacao`) VALUES
-(1, 1, 'PPL + Full Body', 4, 'intermediario', 'treino_usuario_1.txt', 'Peito', 'A'),
-(2, 1, 'PPL + Full Body', 5, 'intermediario', 'treino_usuario_1_20250610_123401.txt', 'Peito, Ombro e Perna', 'D'),
-(3, 4, 'PPL + Upper/Lower', 5, 'intermediario', 'treino_usuario_3.txt', NULL, 'A'),
-(4, 9, 'ABCD', 5, 'intermediario', '', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -239,6 +216,7 @@ CREATE TABLE `usuario` (
   `sexo` varchar(30) NOT NULL,
   `protocolo` varchar(30) NOT NULL,
   `nome` varchar(100) NOT NULL,
+  `foto_perfil` varchar(255) DEFAULT NULL,
   `telefone` varchar(15) NOT NULL,
   `carbo_necessarias` float NOT NULL,
   `prot_necessarias` float NOT NULL,
@@ -246,16 +224,6 @@ CREATE TABLE `usuario` (
   `reset_token_hash` varchar(64) DEFAULT NULL,
   `reset_token_expires_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `usuario`
---
-
-INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `email_verified_at`, `verification_token`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`, `reset_token_hash`, `reset_token_expires_at`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$2Ve/BeCj04Dsx.FvFpwYNO4eusUY4QjoyQK3rFMls6xW6LiGnaapS', NULL, '02bcc97d640edfd6699434ef4423b799ef973f5ca7b1b0780f1a7eac333b7e9f', 17, 90, 177, 2047.06, 1.725, 3531.18, 'masculino', 'harris', 'Henrique', '64984355664', 360, 180, 90, NULL, NULL),
-(6, 'kleiberrc@gmail.com', '$2y$10$LnuVw0F8XtQzRhIXHJA/9OHwq8tTHHcHLwhcmgk/QH4KKFB8eFtwW', '2025-06-10 10:46:58', NULL, 0, 0, 0, 0, 0, 0, '', '', 'kleib', '22988882020', 0, 0, 0, NULL, NULL),
-(17, 'jhonatan.davis@estudante.ifgoiano.edu.br', '$2y$10$7hxZN1hgWXqjmGxliUVwR.ijIdLHclX2rOFVOhx971pbY.qrqtKyu', NULL, NULL, 0, 0, 0, 0, 0, 0, '', '', 'Jhonatan Davis', '', 0, 0, 0, NULL, NULL),
-(18, 'jhonatandavis64@gmail.com', '$2y$10$xZE0ITKAN1LQbkstGM2Z7O/9veKGKOFXWUaDfOGqtjr6bM5NAau5.', NULL, NULL, 16, 103, 171, 2198.16, 1.55, 3407.15, 'masculino', 'harris', 'Jhonatan Davis', '', 309, 185.4, 51.5, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -305,6 +273,13 @@ ALTER TABLE `exercicio`
   ADD PRIMARY KEY (`id_exercicio`);
 
 --
+-- Índices de tabela `sessoes_ativas`
+--
+ALTER TABLE `sessoes_ativas`
+  ADD PRIMARY KEY (`id_sessao`),
+  ADD KEY `id_usuario` (`id_usuario`);
+
+--
 -- Índices de tabela `treino`
 --
 ALTER TABLE `treino`
@@ -342,19 +317,19 @@ ALTER TABLE `usuarios_pendentes`
 -- AUTO_INCREMENT de tabela `alimentos`
 --
 ALTER TABLE `alimentos`
-  MODIFY `id_alimentos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_alimentos` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `dieta`
 --
 ALTER TABLE `dieta`
-  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_dieta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `evolucao`
 --
 ALTER TABLE `evolucao`
-  MODIFY `id_evolucao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_evolucao` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `exercicio`
@@ -363,10 +338,16 @@ ALTER TABLE `exercicio`
   MODIFY `id_exercicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
+-- AUTO_INCREMENT de tabela `sessoes_ativas`
+--
+ALTER TABLE `sessoes_ativas`
+  MODIFY `id_sessao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de tabela `treino`
 --
 ALTER TABLE `treino`
-  MODIFY `id_treino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_treino` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `treino_exercicio`
@@ -378,13 +359,23 @@ ALTER TABLE `treino_exercicio`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios_pendentes`
 --
 ALTER TABLE `usuarios_pendentes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Restrições para tabelas despejadas
+--
+
+--
+-- Restrições para tabelas `sessoes_ativas`
+--
+ALTER TABLE `sessoes_ativas`
+  ADD CONSTRAINT `sessoes_ativas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
