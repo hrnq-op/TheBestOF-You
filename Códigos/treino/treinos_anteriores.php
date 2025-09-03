@@ -52,6 +52,9 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 $treinos_anteriores = $resultado->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
+
+require_once '../libs/Parsedown.php';
+$Parsedown = new Parsedown();
 ?>
 
 <!DOCTYPE html>
@@ -98,7 +101,7 @@ $stmt->close();
                         if (!empty($t['arquivo_treino'])) {
                             $caminho = "../montagem_treino/treinos_salvos/" . $t['arquivo_treino'];
                             if (file_exists($caminho)) {
-                                echo nl2br(htmlspecialchars(file_get_contents($caminho)));
+                                echo $Parsedown->text(file_get_contents($caminho));
                             } else {
                                 echo "<em>Arquivo do treino ('" . htmlspecialchars($t['arquivo_treino']) . "') não encontrado.</em>";
                             }

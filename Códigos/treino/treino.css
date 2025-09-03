@@ -62,6 +62,10 @@ header {
 h1 {
     font-size: 32px;
     margin-bottom: 20px;
+    background: #f0f0f0;
+    padding: 12px;
+    border-radius: 8px;
+    max-width: 500px;
 }
 
 h2 {
@@ -164,11 +168,75 @@ textarea {
     background-color: #1db954
 }
 
+/* ================================================= */
+/* == ESTILO CRIATIVO V2: FORMULÁRIO COM ÍCONES == */
+/* ================================================= */
+
+/* Container para cada campo (label + input) */
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
+    margin-bottom: 25px;
+}
+
+/* Estilo dos rótulos (as perguntas) */
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Wrapper para o ícone e o input */
+.input-with-icon {
+    position: relative; /* Essencial para posicionar o ícone */
+}
+
+/* Estilo do ícone dentro do campo */
+.input-with-icon .fas {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa; /* Cor suave para o ícone */
+    transition: color 0.3s ease; /* Animação da cor do ícone */
+}
+
+/* Ajuste específico para o ícone do textarea, para que ele fique no topo */
+.input-with-icon .fa-comment-dots {
+    top: 18px;
+    transform: none; /* Reseta a transformação vertical */
+}
+
+/* Estilo principal e unificado para TEXTAREA e INPUT */
+.styled-input {
+    width: 100%;
+    padding: 12px 15px 12px 45px; /* Padding esquerdo maior para dar espaço ao ícone */
+    font-size: 1rem;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    background-color: #f8f9fa; /* Um cinza muito claro, quase branco */
+    border: none; /* Remove a borda padrão */
+    border-bottom: 2px solid #ddd; /* Apenas uma linha inferior sutil */
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease; /* Animação da cor da linha */
+}
+
+/* Efeito ao focar no campo */
+.styled-input:focus {
+    outline: none;
+    border-bottom-color: #28a745; /* Muda a cor da linha inferior para o nosso verde */
+}
+
+/* Muda a cor do ícone quando o campo está focado */
+.styled-input:focus + .fas {
+    color: #28a745;
+}
+
+/* Estiliza o texto de placeholder */
+.styled-input::placeholder {
+    color: #999;
+    font-style: italic;
 }
 .info-dieta-atual {
     margin-bottom: 20px;
@@ -181,3 +249,112 @@ textarea {
 .qlqr{
     padding: 30px;
 }
+
+/* Estilo unificado para todos os botões no container .botoes */
+.botoes button,
+.botao-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #1db954; /* COR CORRIGIDA: O mesmo verde dos outros */
+    color: white ;      /* Garante que o texto seja sempre branco */
+    padding: 12px 25px;          /* MESMO PADDING */
+    border: none;
+    border-radius: 10px;         /* MESMA BORDA ARREDONDADA */
+    font-size: 16px;             /* MESMO TAMANHO DE FONTE */
+    font-weight: bold;           /* MESMO PESO DA FONTE */
+    cursor: pointer;
+    text-decoration: none; /* Remove o sublinhado do link */
+    transition: background-color 0.3s ease;
+    font-family: 'Segoe UI', sans-serif; /* Garante a mesma família da fonte */
+}
+
+/* Efeito hover unificado */
+.botoes button:hover,
+.botao-pdf:hover {
+    background-color: #14843b; /* O mesmo verde escuro no hover */
+}
+
+/* Estilo específico para o botão "Começar outro treino" permanece separado */
+.botoes button.outra {
+    background-color: #ccc;
+    color: #2c2c54;
+}
+
+.botoes button.outra:hover {
+    background-color: #bbb;
+}
+
+/* Regra para o ícone, se necessário */
+.botao-pdf i {
+    margin-right: 8px;
+}
+
+/* Adicione este código ao seu arquivo treino.css */
+
+/* Estilo para os títulos dos dias de treino (ex: Dia 1: Peito) */
+.dieta h3 {
+    margin-top: 30px; /* Adiciona espaço acima de cada tabela */
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0; /* Adiciona uma linha separadora */
+    font-size: 1.5rem;
+}
+/* Garante que o primeiro título não tenha margem extra em cima */
+.dieta h3:first-of-type {
+    margin-top: 5px;
+}
+
+
+/* --- ESTILOS PARA A TABELA DE TREINO --- */
+.dieta table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+
+.dieta th, .dieta td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.dieta th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+.dieta tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dieta tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Alinhamento para colunas de Séries, Repetições e Descanso */
+.dieta td:nth-child(n+2) { 
+    text-align: center;
+}
+
+/* Estilo para o link de execução do exercício */
+.link-execucao {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #28a745; /* Um tom de verde */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.link-execucao:hover {
+    background-color: #218838; /* Verde mais escuro */
+}
+
+

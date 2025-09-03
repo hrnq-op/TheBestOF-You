@@ -37,7 +37,7 @@ header {
 }
 
 .logo img {
-    height: 85px; /* Tamanho da logo no header (ajustado para index.php) */
+    height: 120px; /* Tamanho da logo no header (ajustado para index.php) */
     width: auto; /* Garante proporção */
     margin-left: 0px;
 }
@@ -45,10 +45,11 @@ header {
 /* Nome do site */
 .site-name {
     font-size: 1.8rem;
-    font-weight: 800;
+    font-weight: 700;
     margin-right: auto; /* Mover para a esquerda */
     margin-left: 20px; /* Adicionar um pequeno espaçamento da logo */
-    color: #000; /* Título do site agora é preto */
+    
+    flex-grow: 1;
 }
 
 /* Links de navegação */

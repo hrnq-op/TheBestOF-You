@@ -6,7 +6,8 @@
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #eeeef1;
+    /* --- COR DE FUNDO ADICIONADA/CORRIGIDA AQUI --- */
+    background-color: #eeeef1; 
     color: #2c2c54;
     line-height: 1.6;
 }
@@ -52,9 +53,3 @@ header {
     text-align: center;
     flex-grow: 1;
 }
-
-.button {
-    background-color: #00c853;
-    color: white;
-}
-

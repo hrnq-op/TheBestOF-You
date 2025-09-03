@@ -7,8 +7,37 @@ body {
     line-height: 1.6;
 }
 
+/* Header - Estilo baseado no treino.css */
+header {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    padding: 0 20px; /* Adiciona um espaçamento nas laterais */
+}
+
+.logo img {
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+.site-name h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0; /* Remove a margem padrão do h1 */
+}
+
+
 .perfil-main {
-    padding: 120px 20px 50px;
+    padding: 10px 20px 50px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -354,191 +383,6 @@ body {
     border: 1px solid #f5c6cb;
 }
 
-/* Estilos específicos para o Header da página de Perfil */
-header.perfil-header {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-/* A logo img agora tem estilo inline no HTML, então estas regras são removidas */
-/* header.perfil-header .logo img { ... } */
-
-.site-name {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-right: auto; /* Mover para a esquerda */
-    margin-left: 20px; /* Adicionar um pequeno espaçamento da logo */
-    color: #000; /* Título do site agora é preto */
-}
-
-
-/* Remove a navegação e o auth-container do header do perfil, se existirem */
-header.perfil-header .nav-links,
-header.perfil-header .auth-container {
-    display: none;
-}
-
-/* Estilo para o link "Voltar para Principal" */
-.header-right-perfil {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-}
-
-.back-to-home-link {
-    background-color: #00c853;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-right: 45px; /* Puxa o botão 20px para a esquerda */
-}
-
-.back-to-home-link:hover {
-    background-color: #00b44b;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 200, 83, 0.2);
-}
-
-.back-to-home-link .fas {
-    font-size: 1.1rem;
-}
-
-/* ... (Seu CSS existente do perfil.css) ... */
-
-/* Nova seção: Dispositivos Conectados */
-.connected-devices-section {
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 1px solid #eee;
-    text-align: center;
-}
-
-.connected-devices-section h3 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 25px;
-    font-weight: 700;
-}
-
-.connected-devices-section p {
-    color: #777;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-
-.device-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 500px; /* Limita a largura da lista para melhor leitura */
-    margin: 0 auto; /* Centraliza a lista */
-    padding: 0 10px; /* Padding para evitar colar nas bordas em mobile */
-}
-
-.device-item {
-    background-color: #f8f8f8;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left; /* Alinha o texto das informações do dispositivo */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
-}
-
-.device-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.device-item.active-device {
-    border-left: 5px solid #00c853; /* Borda verde para o dispositivo ativo */
-    background-color: #e6ffe6; /* Fundo mais claro para ativo */
-}
-
-.device-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.device-icon {
-    font-size: 1.8rem;
-    color: #555;
-}
-
-.device-item.active-device .device-icon {
-    color: #00c853; /* Ícone verde para ativo */
-}
-
-.device-info h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
-}
-
-.device-info p {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #777;
-    line-height: 1.4;
-}
-
-.btn-deslogar-dispositivo {
-    background-color: #ffc107; /* Amarelo de alerta */
-    color: #333;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    flex-shrink: 0; /* Impede que o botão encolha em telas pequenas */
-}
-.btn-deslogar-dispositivo:hover {
-    background-color: #e0a800;
-    transform: translateY(-1px);
-}
-
-.active-tag {
-    background-color: #00c853;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    flex-shrink: 0; /* Impede que a tag encolha */
-}
-
-.no-devices {
-    color: #888;
-    font-style: italic;
-    margin-top: 20px;
-}
-
-/* Fim da nova seção de Dispositivos Conectados */
-
 /* ... (O restante do seu CSS do perfil.css, incluindo media queries) ... */
 
 /* Ajustes de responsividade - Adicione os botões novos às media queries existentes */
@@ -575,14 +419,6 @@ header.perfil-header .auth-container {
 
 /* Ajustes de responsividade para perfil.css */
 @media (max-width: 900px) {
-    header.perfil-header .site-name {
-        font-size: 1.6rem;
-    }
-    .back-to-home-link {
-        font-size: 0.9rem;
-        padding: 7px 12px;
-        margin-right: -10px; /* Ajuste para telas menores */
-    }
 
     .perfil-container {
         padding: 25px;
@@ -617,22 +453,8 @@ header.perfil-header .auth-container {
 }
 
 @media (max-width: 600px) {
-    header.perfil-header {
+    header {
         padding: 10px 15px;
-    }
-    header.perfil-header .site-name {
-        font-size: 1.4rem;
-        margin: 0 10px;
-    }
-
-    .back-to-home-link {
-        font-size: 0.8rem;
-        padding: 5px 8px;
-        gap: 5px;
-        margin-right: -5px; /* Ajuste para telas muito pequenas */
-    }
-    .back-to-home-link .fas {
-        font-size: 0.9rem;
     }
 
     .perfil-main {

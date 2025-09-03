@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <i class="fas fa-arrow-left"></i>
         </a>
 
-        <h1>Cadastrar</h1>
+        <h1>Cadastrar</h1>  
         
         <?php if (!empty($mensagem)) echo $mensagem; ?>
 

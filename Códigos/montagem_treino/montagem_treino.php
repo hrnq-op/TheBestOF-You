@@ -141,7 +141,7 @@ REGRAS OBRIGATÓRIAS:
     - Nome do Exercício
     - Séries e Repetições (ajustado para o nível de experiência)
     - O link para o vídeo de execução.
-4.  O output deve ser apenas o plano de treino, de forma clara e organizada por dia e sem formatação, ou seja nada em negrito, etc.
+4.  O output deve ser apenas o plano de treino, de forma clara e organizada por dia.
 
 MODELO DE RESPOSTA ESPERADO:
 
@@ -163,7 +163,7 @@ LISTA DE EXERCÍCIOS DISPONÍVEIS:
 
 
 // 🟢 ETAPA 6: Chamar a API do DeepSeek
-$apiKey = 'sk-10bd79c8c74d4946bf0d75c7f2ecfdf8'; // ⚠️ SUA CHAVE DE API - É mais seguro usar variáveis de ambiente!
+$apiKey = ''; // ⚠️ SUA CHAVE DE API - É mais seguro usar variáveis de ambiente!
 
 // URL correta da API DeepSeek para chat
 $url = "https://api.deepseek.com/chat/completions";
@@ -243,6 +243,10 @@ foreach (array_unique($exercicios_extraidos) as $nome_exercicio) { // Usar array
     }
     $stmt_find->close();
 }
+require_once '../libs/Parsedown.php';
+$Parsedown = new Parsedown();
+$treino_html = $Parsedown->text($treino);
+
 ?>
 
 
@@ -280,7 +284,7 @@ foreach (array_unique($exercicios_extraidos) as $nome_exercicio) { // Usar array
         <p><strong>Ênfase:</strong> <?= htmlspecialchars($enfase) ?></p>
 
         <h2>Treino sugerido:</h2>
-        <div class="treino"><?= nl2br(htmlspecialchars($treino)) ?></div>
+        <div class="treino"><?= $treino_html ?></div>
 
         <div class="botoes">
             <form method="post" id="formSalvar">

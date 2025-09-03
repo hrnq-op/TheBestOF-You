@@ -268,16 +268,15 @@ $stmt_sessoes->close();
 </head>
 
 <body>
-    <header class="perfil-header">
+    <header>
         <div class="logo">
-            <img src="imagens/logo.png" alt="Logo" style="height: 85px; width: auto; ">
+            <a href="../pagina_principal/index.php"><img src="imagens/Logo.png" alt="Logo"></a>
         </div>
-        <div class="site-name">TheBestOF-You</div>
-
-        <div class="header-right-perfil">
-            <a href="../pagina_principal/index.php" class="back-to-home-link">
-                <i class="fas fa-home"></i> Voltar para Principal
-            </a>
+        <div class="site-name">
+            <h1>Perfil</h1>
+        </div>
+        <div class="logo">
+            <a href="../pagina_principal/index.php"><img src="imagens/Logo.png" alt="Logo"></a>
         </div>
     </header>
 
