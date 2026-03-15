@@ -1,7 +1,7 @@
 # 🏋️‍♂️ TheBestOF-You
 
 > **Status do Projeto:** Concluído (Projeto Final do Curso Técnico)
-> **Aviso:** Este projeto foi desenvolvido durante o ensino médio como Trabalho de Conclusão de Curso (TCC). Ele representa o início da minha jornada na programação e, por isso, você encontrará commits com nomes "criativos" (e nada profissionais) e um código que reflete meu aprendizado na época. 😉
+> **Aviso:** Este projeto foi desenvolvido durante o ensino médio como Trabalho Final do Curso. Ele representa o início da minha jornada na programação e, por isso, você encontrará commits com nomes "criativos" (e nada profissionais) e um código que reflete meu aprendizado na época. 😉
 
 ## 📝 Sobre o Projeto
 O **TheBestOF-You** é uma plataforma web voltada para a saúde e bem-estar, com o objetivo de automatizar a criação de dietas e treinos personalizados. Utilizando inteligência artificial, o sistema gera planos adaptados às necessidades específicas de cada usuário.
