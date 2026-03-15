@@ -57,6 +57,42 @@ $Parsedown = new Parsedown();
     <meta charset="UTF-8">
     <title>Dietas Anteriores</title>
     <link rel="stylesheet" href="dietas_anteriores.css">
+    
+    <style>
+        /* Aplica o estilo apenas para tabelas dentro do conteúdo da dieta */
+        .dieta-conteudo table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .dieta-conteudo th, .dieta-conteudo td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        
+        /* Cabeçalho Verde */
+        .dieta-conteudo th {
+            background-color: #00c853; 
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        .dieta-conteudo tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .dieta-conteudo tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -88,13 +124,17 @@ $Parsedown = new Parsedown();
                     $caminho = "../montagem_dieta/" . $d['arquivo_dieta'];
                     if ($d['arquivo_dieta'] && file_exists($caminho)) {
                         $conteudo = file_get_contents($caminho);
-                        echo $Parsedown->text($conteudo); // <-- agora renderiza Markdown
+                        echo $Parsedown->text($conteudo); // Renderiza a tabela
                     } else {
                         echo "<em>Arquivo da dieta não encontrado ou não especificado.</em>";
                     }
                     ?>
                     <br>
-                    <a href="?usar=<?= $d['id_dieta'] ?>" onclick="return confirm('Tem certeza que deseja tornar esta a sua dieta ativa?');">Usar esta dieta</a>
+                    <a href="?usar=<?= $d['id_dieta'] ?>" 
+                       onclick="return confirm('Tem certeza que deseja tornar esta a sua dieta ativa?');"
+                       style="display:inline-block; margin-top:10px; padding:10px 15px; background:#00c853; color:white; text-decoration:none; border-radius:5px;">
+                       Usar esta dieta
+                    </a>
                 </div>
             </div>
         <?php endforeach; ?>

@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_alteracao'])) 
     $refeicoes_final = !empty($refeicoes_digitadas) ? intval($refeicoes_digitadas) : $refeicoes_atuais;
 
     if (!empty($alteracao_usuario) && !empty($dieta_texto) && !empty($objetivo_atual) && !empty($refeicoes_final)) {
-        // CÓDIGO MODIFICADO E MELHORADO
-$prompt = <<<EOT
+        
+        $prompt = <<<EOT
 Você é um nutricionista profissional.
 A dieta base para as alterações é a seguinte:
 $dieta_texto
@@ -149,7 +149,38 @@ $dieta_html = $Parsedown->text($dieta_texto_exibida);
 <head>
     <meta charset="UTF-8">
     <title>Dieta Atual</title>
-    <link rel="stylesheet" href="dieta.css?=3"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="dieta.css?=3"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        .dieta table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .dieta th, .dieta td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        .dieta th {
+            background-color: #00c853; /* Cor Verde */
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        .dieta tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .dieta tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
 
@@ -187,7 +218,8 @@ $dieta_html = $Parsedown->text($dieta_texto_exibida);
         <p><strong>Refeições atuais:</strong> <?= htmlspecialchars($refeicoes_atuais) ?></p>
     </div>
 
-    <form method="post" id="alteracaoForm"> <div class="form-group">
+    <form method="post" id="alteracaoForm"> 
+        <div class="form-group">
             <label for="chatDieta"><strong>Solicitar alteração:</strong></label>
             <div class="input-with-icon">
                 <i class="fas fa-pen-fancy"></i>
@@ -234,20 +266,12 @@ $dieta_html = $Parsedown->text($dieta_texto_exibida);
 </div>
 
 <script>
-    // Pega os elementos do formulário e do loader pelos seus IDs
     const form = document.getElementById('alteracaoForm');
     const loader = document.getElementById('loader-wrapper');
 
-    // Adiciona um "ouvinte" que espera pelo evento de 'submit' do formulário
     form.addEventListener('submit', function() {
-        // Quando o formulário for enviado (ou seja, quando o botão "Enviar" for clicado):
-        
-        // 1. Pega o campo de texto principal
         const chatInput = document.getElementById('chatDieta');
-
-        // 2. Verifica se o campo de texto não está vazio
         if (chatInput.value.trim() !== '') {
-            // 3. Se não estiver vazio, mostra o spinner
             loader.style.display = 'flex';
         }
     });

@@ -4,55 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Escolha de Alimentos</title>
-    <link rel="stylesheet" href="selecao_alimentos.css?=2">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* ====================== SPINNER (NOVO) ====================== */
-        #spinner {
-            display: none;             /* fica oculto até o submit */
-            position: fixed;
-            inset: 0;                  /* top/right/bottom/left: 0 */
-            background: rgba(255, 255, 255, 0.75);
-            z-index: 9999;             /* sobre tudo */
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        #spinner .loader {
-            width: 70px;
-            height: 70px;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #00c853;     /* verde */
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-        }
-
-        #spinner .msg {
-            font: 500 16px/1.2 Inter, system-ui, Arial, sans-serif;
-            color: #00a944;            /* tom de verde */
-            text-align: center;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        /* ==================== FIM SPINNER (NOVO) ==================== */
-    </style>
+    <link rel="stylesheet" href="selecao_alimentos.css?=3">
 </head>
 
 <body>
@@ -73,6 +25,7 @@
 
 <div class="qlqr">
     <h1>Fale os alimentos que você gostaria de ter na sua dieta</h1>
+    
     <form method="post" class="form-caixa">
         <div class="animated-select">
             <label for="alimentos">Alimentos (separe por vírgula):</label>
@@ -100,16 +53,16 @@ $refeicoes = 0;
 
 function obterIdAlimento($conexao, $nome, $id_dieta)
 {
-    global $id_alimento;
     $stmt = $conexao->prepare("SELECT id_alimentos FROM alimentos WHERE nome = ? AND id_dieta = ?");
     $stmt->bind_param("si", $nome, $id_dieta);
     $stmt->execute();
-    $stmt->bind_result($id_alimento);
+    $stmt->bind_result($id_alimento_encontrado);
     $stmt->fetch();
     $stmt->close();
-    return $id_alimento ?? null;
+    return $id_alimento_encontrado ?? null;
 }
 
+// ETAPA 1: Exibe a confirmação (Tabela com os alimentos)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["alimentos"], $_POST["refeicoes"]) && !isset($_POST["montar_dieta"])) {
     $alimentos = explode(",", $_POST["alimentos"]);
     $refeicoes = intval($_POST["refeicoes"]);
@@ -122,63 +75,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["alimentos"], $_POST["
     }
 
     if (!empty($alimentosEscolhidos)) {
-        echo '<div style="max-width: 500px; margin: 30px auto; font-family: Inter, sans-serif;">';
+        // Div container para centralizar
+        echo '<div style="max-width: 600px; margin: 0 auto;">';
 
-        echo '<div style="
-            background-color: white;
-            padding: 1rem 1.5rem;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-weight: 500;
-            font-size: 1.1rem;
-        ">
-            <span style="color: #00b44b;">Número de refeições:</span> 
-            <span style="color: #000;">' . htmlspecialchars($refeicoes) . '</span>
-        </div>';
-
-        echo '<table style="
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.5s ease-out;
-        ">';
-        echo '<thead>';
-        echo '<tr style="background-color: #00c853; color: white;">';
-        echo '<th style="padding: 14px; text-align: left; font-size: 1rem; color: #00b44b;">Alimentos Escolhidos</th>';
-        echo '</tr>';
-        echo '</thead>';
+        // Tabela usando a classe do seu CSS
+        echo '<table class="tabela-alimentos">';
+        echo '<thead><tr><th>Alimentos Escolhidos (' . htmlspecialchars($refeicoes) . ' refeições/dia)</th></tr></thead>';
         echo '<tbody>';
 
         foreach ($alimentosEscolhidos as $alimento) {
-            echo '<tr style="border-bottom: 1px solid #e0e0e0;">';
-            echo '<td style="padding: 12px 14px; font-size: 0.95rem; color: #333;">' . htmlspecialchars($alimento) . '</td>';
-            echo '</tr>';
+            echo '<tr><td>' . htmlspecialchars($alimento) . '</td></tr>';
         }
 
-        echo '</tbody>';
-        echo '</table>';
+        echo '</tbody></table>';
 
-        // Form para montar a dieta
-        echo '<form method="post" style="margin-top: 20px; text-align: center;">';
+        // Form para confirmar e avançar
+        echo '<form method="post" style="text-align: center;">';
         foreach ($alimentosEscolhidos as $alimento) {
             echo '<input type="hidden" name="alimentos[]" value="' . htmlspecialchars($alimento) . '">';
         }
         echo '<input type="hidden" name="refeicoes" value="' . $refeicoes . '">';
+        // Botão usando a classe do seu CSS
         echo '<button type="submit" name="montar_dieta" class="btn-avc btn-pequeno">Avançar</button>';
         echo '</form>';
         echo '</div>';
     }
 }
 
+// ETAPA 2: Salva no banco e redireciona
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["montar_dieta"])) {
     $alimentosEscolhidos = $_POST["alimentos"] ?? [];
     $refeicoes = intval($_POST["refeicoes"]);
 
+    // Busca a última dieta criada para este usuário
     $stmt = $conexao->prepare("SELECT id_dieta FROM dieta WHERE id_usuario = ? ORDER BY id_dieta DESC LIMIT 1");
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
@@ -187,30 +116,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["montar_dieta"])) {
     $stmt->close();
 
     if ($id_dieta) {
+        // Atualiza o número de refeições
         $stmt = $conexao->prepare("UPDATE dieta SET refeicoes = ? WHERE id_dieta = ?");
         $stmt->bind_param("ii", $refeicoes, $id_dieta);
         $stmt->execute();
         $stmt->close();
 
+        // Loop para salvar CADA alimento
         foreach ($alimentosEscolhidos as $alimento) {
             $alimento = trim($alimento);
             if (!empty($alimento)) {
                 $id_alimento = obterIdAlimento($conexao, $alimento, $id_dieta);
 
+                // Se o alimento ainda não existe nesta dieta, insere
                 if (!$id_alimento) {
-                    $stmt = $conexao->prepare("INSERT INTO alimentos (nome, id_dieta) VALUES (?, ?)");
-                    $stmt->bind_param("si", $alimento, $id_dieta);
-                    $stmt->execute();
-                    $stmt->close();
+                    $stmt_ins = $conexao->prepare("INSERT INTO alimentos (nome, id_dieta) VALUES (?, ?)");
+                    $stmt_ins->bind_param("si", $alimento, $id_dieta);
+                    $stmt_ins->execute();
+                    $stmt_ins->close();
                 }
             }
-
-            $conexao->close();
-            header("Location: ../montagem_dieta/montagem_dieta.php");
-            exit();
         }
+        
+        // Finaliza conexão e redireciona (FORA DO LOOP para garantir que salvou todos)
+        $conexao->close();
+        header("Location: ../montagem_dieta/montagem_dieta.php?action=gerar_nova");
+        exit();
     }
-
+    
+    // Fallback se não achar dieta
     $conexao->close();
     header("Location: ../montagem_dieta/montagem_dieta.php");
     exit();
@@ -218,41 +152,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["montar_dieta"])) {
 ?>
 </div>
 
-<!-- Overlay do Spinner (NOVO) -->
 <div id="spinner" aria-hidden="true">
     <div class="loader" role="status" aria-label="Carregando"></div>
-    <div class="msg">Gerando sua dieta…</div>
 </div>
 
-<!-- JS do Spinner (NOVO) -->
 <script>
-(function () {
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. ANIMAÇÃO DE ENTRADA DOS CAMPOS
+    // Seleciona todos os elementos com a classe .animated-select
+    const elements = document.querySelectorAll('.animated-select');
+    
+    // Para cada elemento, adiciona a classe .show com um pequeno atraso (efeito cascata)
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('show');
+        }, index * 200); // 200ms de diferença entre cada um
+    });
+
+    // 2. LÓGICA DO SPINNER
     function showSpinner() {
         var sp = document.getElementById('spinner');
         if (sp) sp.style.display = 'flex';
     }
 
-    // Garante que qualquer form da página acione o spinner
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('form').forEach(function (form) {
-            form.addEventListener('submit', function () {
-                showSpinner();
-            }, { passive: true });
-        });
-    });
-
-    // Fallback: se algum script disparar o submit antes do DOMContentLoaded
-    // ainda tentamos mostrar o spinner imediatamente.
-    window.addEventListener('submit', function (e) {
-        // Só reage a submits de formulário
-        if (e && e.target && e.target.tagName === 'FORM') {
+    // Adiciona evento de submit em todos os formulários da página
+    document.querySelectorAll('form').forEach(function (form) {
+        form.addEventListener('submit', function () {
             showSpinner();
-        }
-    }, true);
-})();
+        }, { passive: true });
+    });
+});
 </script>
 
-<!-- Seu script (opcional). Não é necessário para o spinner -->
-<script src="script.js"></script>
 </body>
 </html>

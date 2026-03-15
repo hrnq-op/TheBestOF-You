@@ -42,17 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_alteracao'])) 
 
     if (!empty($alteracao_usuario) && !empty($treino_texto) && !empty($divisao_atual) && !empty($dias_final) && !empty($nivel_atual)) {
         
-        // Etapa 1: Buscar todos os nomes de exercícios do banco de dados
+        // Etapa 1: Buscar nomes de exercícios
         $sql_nomes = "SELECT nome FROM exercicio ORDER BY nome ASC";
         $resultado_nomes = $conexao->query($sql_nomes);
         $lista_de_exercicios = [];
         while ($row = $resultado_nomes->fetch_assoc()) {
             $lista_de_exercicios[] = $row['nome'];
         }
-        // Formata a lista para ser inserida no prompt
         $string_exercicios_formatada = "- " . implode("\n- ", $lista_de_exercicios);
 
-        // Prompt "Nível Profissional" que inclui a lista de exercícios
         $prompt = <<<EOT
 Você é um personal trainer de elite. Sua tarefa é criar um plano de treino estruturado, preciso e que utilize apenas exercícios pré-aprovados.
 
@@ -86,7 +84,7 @@ Para cada dia de treino, crie um subtítulo (ex: ### Dia 1: Peito e Tríceps) e,
 Agora, gere o novo plano de treino completo seguindo estritamente TODAS as regras acima.
 EOT;
 
-        $apiKey = ' '; // Substitua com sua chave
+        $apiKey = ''; // Substitua com sua chave
         
         $dados = [
             "model" => "deepseek-chat",
@@ -122,37 +120,26 @@ EOT;
 
 // --- QUANDO O USUÁRIO CLICA EM "SALVAR COMO NOVO TREINO" ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_treino'])) {
-    if (
-        isset($_SESSION['novo_treino_gerado']) &&
-        isset($_SESSION['dias']) &&
-        isset($_SESSION['divisao']) &&
-        isset($_SESSION['nivel']) &&
-        isset($_SESSION['enfase_muscular']) // <-- CORREÇÃO
-    ) {
-        $novo_treino = $_SESSION['novo_treino_gerado'];
-        $dias = intval($_SESSION['dias']);
-        $divisao = $_SESSION['divisao'];
-        $nivel = $_SESSION['nivel'];
-        $enfase = $_SESSION['enfase_muscular']; // <-- CORREÇÃO
-
-// --- QUANDO O USUÁRIO CLICA EM "SALVAR COMO NOVO TREINO" ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_treino'])) {
     if (isset($_SESSION['novo_treino_gerado'], $_SESSION['dias'], $_SESSION['divisao'], $_SESSION['nivel'], $_SESSION['enfase_muscular'])) {
         $novo_treino = $_SESSION['novo_treino_gerado'];
         $dias = intval($_SESSION['dias']);
         $divisao = $_SESSION['divisao'];
         $nivel = $_SESSION['nivel'];
         $enfase = $_SESSION['enfase_muscular'];
+        
         $pasta = "../montagem_treino/treinos_salvos/";
         if (!file_exists($pasta)) { mkdir($pasta, 0777, true); }
+        
         $nome_arquivo = "treino_usuario_" . $usuario_id . "_" . date("Ymd_His") . ".txt";
         file_put_contents($pasta . $nome_arquivo, $novo_treino);
 
+        // Desativa treino anterior
         $stmt_update = $conexao->prepare("UPDATE treino SET situacao = 'D' WHERE id_usuario = ?");
         $stmt_update->bind_param("i", $usuario_id);
         $stmt_update->execute();
         $stmt_update->close();
 
+        // Insere novo treino
         $sql_insert = "INSERT INTO treino (id_usuario, divisao_treino, dias_de_treino, nivel_de_treino, arquivo_treino, enfase_muscular, situacao) VALUES (?, ?, ?, ?, ?, ?, 'A')";
         $stmt_insert = $conexao->prepare($sql_insert);
         $stmt_insert->bind_param("isisss", $usuario_id, $divisao, $dias, $nivel, $nome_arquivo, $enfase);
@@ -175,7 +162,6 @@ function formatarTreinoComLinks($texto_treino, $conexao) {
         return $Parsedown->text($texto_treino);
     }
     
-    // Busca exata e rápida, pois a IA foi instruída a usar os nomes corretos.
     $sql_link = "SELECT link_video_execucao FROM exercicio WHERE nome = ? LIMIT 1";
     $stmt_link = $conexao->prepare($sql_link);
 
@@ -234,15 +220,105 @@ function formatarTreinoComLinks($texto_treino, $conexao) {
 <head>
     <meta charset="UTF-8">
     <title>Treino Atual</title>
-    <link rel="stylesheet" href="treino.css?v=5"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="treino.css?v=5"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* Estilo da Tabela de Treino (Verde) */
+        .dieta table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .dieta th, .dieta td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        .dieta th {
+            background-color: #00c853; /* Verde */
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        .dieta tr:nth-child(even) { background-color: #f9f9f9; }
+        .dieta tr:hover { background-color: #f1f1f1; }
+
+        /* Estilo do Botão PDF */
+        .botao-pdf {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #e74c3c; /* Vermelho */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            height: 44px; /* Mesma altura dos outros botões */
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
+        .botao-pdf:hover {
+            background-color: #c0392b;
+        }
+
+        /* Ajuste do link de vídeo dentro da tabela */
+        .link-execucao {
+            color: #00c853;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-execucao:hover {
+            text-decoration: underline;
+        }
+
+        /* Spinner Loader */
+        #loader-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: none; /* Inicialmente oculto */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #00c853;
+            border-radius: 50%;
+            width: 60px; height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
+
 <header>
     <div class="logo"><a href="../pagina_principal/index.php"><img src="imagens/Logo.png" alt="Logo"></a></div>
     <div class="site-name"><h1>Treino</h1></div>
     <nav class="nav-links"><a href="treinos_anteriores.php">Treinos Anteriores</a></nav>
     <div class="logo"><a href="../pagina_principal/index.php"><img src="imagens/Logo.png" alt="Logo"></a></div>
 </header>
+
+<div id="loader-wrapper">
+    <div class="loader"></div>
+    <p style="margin-top: 15px; color: #00c853; font-weight: bold;">Gerando alterações...</p>
+</div>
 
 <div class="qlqr">
     <h1>Plano Atual:</h1>
@@ -259,8 +335,7 @@ function formatarTreinoComLinks($texto_treino, $conexao) {
         <?php endif; ?>
     </div>
 
-    <form method="post">
-
+    <form method="post" id="alteracaoForm">
         <div class="form-group">
             <label for="chatTreino"><strong>Solicitar alteração:</strong></label>
             <div class="input-with-icon">
@@ -286,7 +361,6 @@ function formatarTreinoComLinks($texto_treino, $conexao) {
         </div>
 
         <div class="botoes">
-            
             <button type="submit" name="enviar_alteracao"><i class="fas fa-paper-plane"></i> Gerar Alteração</button>
             <button class="outra" onclick="window.location.href='../selecao_treino/selecao_treino.php'" type="button"><i class="fas fa-sync-alt"></i> Começar outro treino</button>
             <a href="gerar_pdf_treino.php?treino=<?= urlencode($treino_texto) ?>&enfase=<?= urlencode($enfase_atual) ?>" target="_blank" class="botao-pdf"><i class="fas fa-file-pdf"></i> Gerar um PDF</a>
@@ -311,6 +385,20 @@ function formatarTreinoComLinks($texto_treino, $conexao) {
             novaDietaDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });
+
+    // Script para mostrar o Spinner ao enviar o formulário
+    const form = document.getElementById('alteracaoForm');
+    const loader = document.getElementById('loader-wrapper');
+
+    if (form && loader) {
+        form.addEventListener('submit', function() {
+            const chatInput = document.getElementById('chatTreino');
+            // Só mostra o loader se o campo obrigatório estiver preenchido
+            if (chatInput.value.trim() !== '') {
+                loader.style.display = 'flex';
+            }
+        });
+    }
 </script>
 
 </body>

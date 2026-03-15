@@ -63,6 +63,53 @@ $Parsedown = new Parsedown();
     <meta charset="UTF-8">
     <title>Treinos Anteriores</title>
     <link rel="stylesheet" href="treinos_anteriores.css">
+    
+    <style>
+        /* Estilos da Tabela (Verde) */
+        .dieta-conteudo table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .dieta-conteudo th, .dieta-conteudo td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        .dieta-conteudo th {
+            background-color: #00c853; /* Verde */
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        .dieta-conteudo tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .dieta-conteudo tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Estilo do botão "Usar este treino" */
+        .btn-usar {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #00c853;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-usar:hover {
+            background-color: #009624;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -95,9 +142,9 @@ $Parsedown = new Parsedown();
                         <p><strong>Ênfase:</strong> <?= htmlspecialchars($t['enfase_muscular']) ?></p>
                         <hr>
                     <?php endif; ?>
-                    <p>
+                    
+                    <div class="conteudo-texto">
                         <?php
-                        // Verifica se o arquivo de treino existe antes de tentar lê-lo
                         if (!empty($t['arquivo_treino'])) {
                             $caminho = "../montagem_treino/treinos_salvos/" . $t['arquivo_treino'];
                             if (file_exists($caminho)) {
@@ -109,8 +156,9 @@ $Parsedown = new Parsedown();
                             echo "<em>Nenhum arquivo de treino associado.</em>";
                         }
                         ?>
-                    </p>
-                    <a href="?usar=<?= $t['id_treino'] ?>" class="usar-treino" onclick="return confirm('Tem certeza que deseja definir este como seu treino atual?')">Usar este treino</a>
+                    </div>
+                    
+                    <a href="?usar=<?= $t['id_treino'] ?>" class="btn-usar" onclick="return confirm('Tem certeza que deseja definir este como seu treino atual?')">Usar este treino</a>
                 </div>
             </div>
         <?php endforeach; ?>

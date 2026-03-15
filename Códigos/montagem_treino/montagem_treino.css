@@ -7,7 +7,7 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #eeeef1;
-    color: #2c2c54;
+    color: #333;
     line-height: 1.6;
 }
 
@@ -58,7 +58,7 @@ header {
 }
 
 h1, h2 {
-    color: #2c2c54;
+    color: #333;
     margin-bottom: 15px;
 }
 
