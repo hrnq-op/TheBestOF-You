@@ -33,17 +33,7 @@ CREATE TABLE `alimentos` (
   `id_dieta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `alimentos`
---
 
-INSERT INTO `alimentos` (`id_alimentos`, `nome`, `id_dieta`) VALUES
-(1, 'frango', 2),
-(2, 'arroz', 2),
-(3, 'feijão', 2),
-(4, 'ovo', 2),
-(5, 'alface', 2),
-(6, 'pasta de amendoim', 2);
 
 -- --------------------------------------------------------
 
@@ -61,13 +51,6 @@ CREATE TABLE `dieta` (
   `arquivo_dieta` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `dieta`
---
-
-INSERT INTO `dieta` (`id_dieta`, `data_inicio`, `id_usuario`, `objetivo`, `situacao`, `refeicoes`, `arquivo_dieta`) VALUES
-(1, '2025-06-14', 9, 'cutting', 'A', 0, ''),
-(2, '2025-06-15', 18, 'cutting', 'A', 4, '');
 
 -- --------------------------------------------------------
 
@@ -87,13 +70,6 @@ CREATE TABLE `evolucao` (
   `imagem` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `evolucao`
---
-
-INSERT INTO `evolucao` (`id_evolucao`, `data_inicio`, `peso_inicio`, `id_usuario`, `data_fim`, `peso_fim`, `objetivo`, `tempo_dieta`, `imagem`) VALUES
-(1, '2025-06-10', 20, 6, '2025-06-10', 120, 'Não definido', '1 mês', 'imagens_evolucao/684837712b174_36168.jpeg'),
-(2, '2025-06-10', 120, 6, '0000-00-00', 0, 'definir', '5 meses', 'imagens_evolucao/68483780bab6f_gordao14.jpg');
 
 -- --------------------------------------------------------
 
@@ -194,14 +170,6 @@ CREATE TABLE `sessoes_ativas` (
   `login_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `sessoes_ativas`
---
-
-INSERT INTO `sessoes_ativas` (`id_sessao`, `session_id`, `id_usuario`, `user_agent`, `ip_address`, `login_at`) VALUES
-(2, 'ru96qkg5pp9p3ct9gkhm229ihf', 19, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 OPR/120.0.0.0', '::1', '2025-08-17 16:55:34');
-
--- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `treino`
@@ -218,17 +186,7 @@ CREATE TABLE `treino` (
   `situacao` varchar(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `treino`
---
 
-INSERT INTO `treino` (`id_treino`, `id_usuario`, `divisao_treino`, `dias_de_treino`, `nivel_de_treino`, `arquivo_treino`, `enfase_muscular`, `situacao`) VALUES
-(1, 1, 'PPL + Full Body', 4, 'intermediario', 'treino_usuario_1.txt', 'Peito', 'A'),
-(2, 1, 'PPL + Full Body', 5, 'intermediario', 'treino_usuario_1_20250610_123401.txt', 'Peito, Ombro e Perna', 'D'),
-(3, 4, 'PPL + Upper/Lower', 5, 'intermediario', 'treino_usuario_3.txt', NULL, 'A'),
-(4, 9, 'ABCD', 5, 'intermediario', '', NULL, '');
-
--- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `treino_exercicio`
@@ -272,15 +230,6 @@ CREATE TABLE `usuario` (
 
 -- --------------------------------------------------------
 
---
--- Estrutura para tabela `usuarios_pendentes`
---
-
-INSERT INTO `usuario` (`id_usuario`, `email`, `senha`, `email_verified_at`, `verification_token`, `idade`, `peso`, `altura`, `metabolismo_basal`, `nivel_atv_fisica`, `gasto_calorico_total`, `sexo`, `protocolo`, `nome`, `foto_perfil`, `telefone`, `carbo_necessarias`, `prot_necessarias`, `gord_necessarias`, `reset_token_hash`, `reset_token_expires_at`) VALUES
-(1, 'henriqueoliveirapiresoo24@gmail.com', '$2y$10$2Ve/BeCj04Dsx.FvFpwYNO4eusUY4QjoyQK3rFMls6xW6LiGnaapS', NULL, '02bcc97d640edfd6699434ef4423b799ef973f5ca7b1b0780f1a7eac333b7e9f', 17, 90, 177, 2047.06, 1.725, 3531.18, 'masculino', 'harris', 'Henrique pires', 'uploads_perfil/68a20937381de.jpg', '64984355664', 360, 180, 90, NULL, NULL),
-(6, 'kleiberrc@gmail.com', '$2y$10$LnuVw0F8XtQzRhIXHJA/9OHwq8tTHHcHLwhcmgk/QH4KKFB8eFtwW', '2025-06-10 10:46:58', NULL, 0, 0, 0, 0, 0, 0, '', '', 'kleib', NULL, '22988882020', 0, 0, 0, NULL, NULL),
-(17, 'jhonatan.davis@estudante.ifgoiano.edu.br', '$2y$10$7hxZN1hgWXqjmGxliUVwR.ijIdLHclX2rOFVOhx971pbY.qrqtKyu', NULL, NULL, 0, 0, 0, 0, 0, 0, '', '', 'Jhonatan Davis', NULL, '', 0, 0, 0, NULL, NULL),
-(19, 'jhonatandavis64@gmail.com', '$2y$10$kwZe7flhNFVV4af0r7QvuOy23/TylDiCzZ8SOJGs3CSktEGnYjSZy', NULL, NULL, 0, 0, 0, 0, 0, 0, '', '', 'Jhonatan Davis', NULL, '', 0, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
